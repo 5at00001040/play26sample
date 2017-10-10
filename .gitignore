@@ -6,7 +6,7 @@ target
 /.project
 /.settings
 /RUNNING_PID
-
+/h2
 
 # Created by https://www.gitignore.io/api/sbt,macos,playframework
 
