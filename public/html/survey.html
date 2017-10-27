@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+
+<div id="sa-app">
+
+<div>
+    <input type="button" v-on:click="resetData" value="reset" />
+</div>
+
+
+
+<div>
+    <form>
+    <input type="text" v-model="question">
+    <input type="text" v-model="choice1">
+    <input type="text" v-model="choice2">
+    <input type="text" v-model="choice3">
+    <input type="text" v-model="choice4">
+    <input type="text" v-model="choice5">
+    <input type="button" v-on:click="addData" value="add" />
+    </form>
+</div>
+
+
+<form>
+    <!-- ここにコントロールを記述 -->
+</form>
+
+
+<div v-for="r in res">
+    <div class="card-divider">
+        <p>Q. {{ r.id }} : {{ r.question }}</p>
+        <form>
+            <input type="radio" value="1" v-bind:name="'sa-radio-' + r.id">{{ r.choice1 }}</input>
+            <input type="radio" value="2" v-bind:name="'sa-radio-' + r.id">{{ r.choice2 }}</input>
+            <input type="radio" value="3" v-bind:name="'sa-radio-' + r.id">{{ r.choice3 }}</input>
+            <input type="radio" value="4" v-bind:name="'sa-radio-' + r.id">{{ r.choice4 }}</input>
+            <input type="radio" value="5" v-bind:name="'sa-radio-' + r.id">{{ r.choice5 }}</input>
+            <input type="button" v-on:click="answer(r.id, 'sa-radio-' + r.id)"  value="answer" />
+        </form>
+    </div>
+</div>
+
+</div>
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="../javascripts/survey.js"></script>
+</body>
+</html>

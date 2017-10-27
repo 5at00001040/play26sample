@@ -14,7 +14,7 @@ trait Tables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = KeyValue.schema ++ PlayEvolutions.schema
+  lazy val schema: profile.SchemaDescription = KeyValue.schema ++ PlayEvolutions.schema ++ SaAnswer.schema ++ SaQuestion.schema
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
 
@@ -78,4 +78,74 @@ trait Tables {
   }
   /** Collection-like TableQuery object for table PlayEvolutions */
   lazy val PlayEvolutions = new TableQuery(tag => new PlayEvolutions(tag))
+
+  /** Entity class storing rows of table SaAnswer
+   *  @param id Database column ID SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param createAt Database column CREATE_AT SqlType(TIMESTAMP)
+   *  @param updateAt Database column UPDATE_AT SqlType(TIMESTAMP) */
+  case class SaAnswerRow(id: Long, createAt: java.sql.Timestamp, updateAt: java.sql.Timestamp)
+  /** GetResult implicit for fetching SaAnswerRow objects using plain SQL queries */
+  implicit def GetResultSaAnswerRow(implicit e0: GR[Long], e1: GR[java.sql.Timestamp]): GR[SaAnswerRow] = GR{
+    prs => import prs._
+    SaAnswerRow.tupled((<<[Long], <<[java.sql.Timestamp], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table SA_ANSWER. Objects of this class serve as prototypes for rows in queries. */
+  class SaAnswer(_tableTag: Tag) extends profile.api.Table[SaAnswerRow](_tableTag, "SA_ANSWER") {
+    def * = (id, createAt, updateAt) <> (SaAnswerRow.tupled, SaAnswerRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(id), Rep.Some(createAt), Rep.Some(updateAt)).shaped.<>({r=>import r._; _1.map(_=> SaAnswerRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column ID SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("ID", O.AutoInc, O.PrimaryKey)
+    /** Database column CREATE_AT SqlType(TIMESTAMP) */
+    val createAt: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("CREATE_AT")
+    /** Database column UPDATE_AT SqlType(TIMESTAMP) */
+    val updateAt: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("UPDATE_AT")
+  }
+  /** Collection-like TableQuery object for table SaAnswer */
+  lazy val SaAnswer = new TableQuery(tag => new SaAnswer(tag))
+
+  /** Entity class storing rows of table SaQuestion
+   *  @param id Database column ID SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param question Database column QUESTION SqlType(VARCHAR)
+   *  @param choice1 Database column CHOICE1 SqlType(VARCHAR)
+   *  @param choice2 Database column CHOICE2 SqlType(VARCHAR)
+   *  @param choice3 Database column CHOICE3 SqlType(VARCHAR)
+   *  @param choice4 Database column CHOICE4 SqlType(VARCHAR)
+   *  @param choice5 Database column CHOICE5 SqlType(VARCHAR)
+   *  @param createAt Database column CREATE_AT SqlType(TIMESTAMP)
+   *  @param updateAt Database column UPDATE_AT SqlType(TIMESTAMP) */
+  case class SaQuestionRow(id: Long, question: Option[String], choice1: Option[String], choice2: Option[String], choice3: Option[String], choice4: Option[String], choice5: Option[String], createAt: java.sql.Timestamp, updateAt: java.sql.Timestamp)
+  /** GetResult implicit for fetching SaQuestionRow objects using plain SQL queries */
+  implicit def GetResultSaQuestionRow(implicit e0: GR[Long], e1: GR[Option[String]], e2: GR[java.sql.Timestamp]): GR[SaQuestionRow] = GR{
+    prs => import prs._
+    SaQuestionRow.tupled((<<[Long], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<?[String], <<[java.sql.Timestamp], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table SA_QUESTION. Objects of this class serve as prototypes for rows in queries. */
+  class SaQuestion(_tableTag: Tag) extends profile.api.Table[SaQuestionRow](_tableTag, "SA_QUESTION") {
+    def * = (id, question, choice1, choice2, choice3, choice4, choice5, createAt, updateAt) <> (SaQuestionRow.tupled, SaQuestionRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(id), question, choice1, choice2, choice3, choice4, choice5, Rep.Some(createAt), Rep.Some(updateAt)).shaped.<>({r=>import r._; _1.map(_=> SaQuestionRow.tupled((_1.get, _2, _3, _4, _5, _6, _7, _8.get, _9.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column ID SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("ID", O.AutoInc, O.PrimaryKey)
+    /** Database column QUESTION SqlType(VARCHAR) */
+    val question: Rep[Option[String]] = column[Option[String]]("QUESTION")
+    /** Database column CHOICE1 SqlType(VARCHAR) */
+    val choice1: Rep[Option[String]] = column[Option[String]]("CHOICE1")
+    /** Database column CHOICE2 SqlType(VARCHAR) */
+    val choice2: Rep[Option[String]] = column[Option[String]]("CHOICE2")
+    /** Database column CHOICE3 SqlType(VARCHAR) */
+    val choice3: Rep[Option[String]] = column[Option[String]]("CHOICE3")
+    /** Database column CHOICE4 SqlType(VARCHAR) */
+    val choice4: Rep[Option[String]] = column[Option[String]]("CHOICE4")
+    /** Database column CHOICE5 SqlType(VARCHAR) */
+    val choice5: Rep[Option[String]] = column[Option[String]]("CHOICE5")
+    /** Database column CREATE_AT SqlType(TIMESTAMP) */
+    val createAt: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("CREATE_AT")
+    /** Database column UPDATE_AT SqlType(TIMESTAMP) */
+    val updateAt: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("UPDATE_AT")
+  }
+  /** Collection-like TableQuery object for table SaQuestion */
+  lazy val SaQuestion = new TableQuery(tag => new SaQuestion(tag))
 }

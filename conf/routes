@@ -5,11 +5,20 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
+POST    /sa                         controllers.SaQuestionController.post
+GET     /sa                         controllers.SaQuestionController.getAll
+GET     /sa/:id                     controllers.SaQuestionController.get(id: Long)
+
+#GET     /survey                     controllers.SaQuestionController.survey
+GET     /reset                      controllers.AdminController.reset
+POST    /reset                      controllers.AdminController.reset
 
 # Spike
 GET     /api001                     controllers.spike.ApiController.api001
 GET     /api002                     controllers.spike.ApiController.api002
 GET     /api003                     controllers.spike.ApiController.api003
+GET     /api004_3                   controllers.spike.ApiController.api004_3
+GET     /api005                     controllers.spike.ApiController.api005
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
