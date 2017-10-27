@@ -15,21 +15,15 @@
 
 <div>
     <form>
-    <input type="text" v-model="question">
-    <input type="text" v-model="choice1">
-    <input type="text" v-model="choice2">
-    <input type="text" v-model="choice3">
-    <input type="text" v-model="choice4">
-    <input type="text" v-model="choice5">
-    <input type="button" v-on:click="addData" value="add" />
+        <input type="text" v-model="question">
+        <input type="text" v-model="choice1">
+        <input type="text" v-model="choice2">
+        <input type="text" v-model="choice3">
+        <input type="text" v-model="choice4">
+        <input type="text" v-model="choice5">
+        <input type="button" v-on:click="addData" value="add" />
     </form>
 </div>
-
-
-<form>
-    <!-- ここにコントロールを記述 -->
-</form>
-
 
 <div v-for="r in res">
     <div class="card-divider">

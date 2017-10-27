@@ -26,10 +26,6 @@ var saList = new Vue({
         this.loadData()
     },
     answer: function (qid, radioName) {
-        console.log(qid)
-        console.log(radioName)
-
-
         var elements = document.getElementsByName(radioName)
         for (var checked = "", i=elements.length; i--;) {
             if ( elements[i].checked ) {
@@ -38,8 +34,7 @@ var saList = new Vue({
             }
         }
 
-        console.log(checked)
-
+        console.log(qid + ":" + checked)
 
         this.loadData()
     },
