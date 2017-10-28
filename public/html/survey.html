@@ -7,26 +7,54 @@
 
 <div id="sa-app">
 
-<div>
-    <input type="button" v-on:click="resetData" value="reset" />
-</div>
+    <div>
+        <input type="button" v-on:click="resetData" value="reset" />
+    </div>
 
 
 
-<div>
-    <form>
-        <input type="text" v-model="question">
-        <input type="text" v-model="choice1">
-        <input type="text" v-model="choice2">
-        <input type="text" v-model="choice3">
-        <input type="text" v-model="choice4">
-        <input type="text" v-model="choice5">
-        <input type="button" v-on:click="addData" value="add" />
-    </form>
-</div>
+    <div>
+        <form>
+            <input type="text" v-model="question">
+            <input type="text" v-model="choice1">
+            <input type="text" v-model="choice2">
+            <input type="text" v-model="choice3">
+            <input type="text" v-model="choice4">
+            <input type="text" v-model="choice5">
+            <input type="button" v-on:click="addData" value="add" />
+        </form>
+    </div>
+
+    <select v-model="selectQuestionId" v-on:change="changeQuestion">
+        <option v-for="q in questionIdList">{{ q.id }}</option>
+    </select>
+
+
+    <div>
+        <p>Q. {{ questionData.id }} {{ questionData.question }}</p>
+        <form>
+            <input type="radio" value="1" v-bind:name="'sa-radio-' + questionData.id">{{ questionData.choice1 }}</input>
+            <input type="radio" value="2" v-bind:name="'sa-radio-' + questionData.id">{{ questionData.choice2 }}</input>
+            <input type="radio" value="3" v-bind:name="'sa-radio-' + questionData.id">{{ questionData.choice3 }}</input>
+            <input type="radio" value="4" v-bind:name="'sa-radio-' + questionData.id">{{ questionData.choice4 }}</input>
+            <input type="radio" value="5" v-bind:name="'sa-radio-' + questionData.id">{{ questionData.choice5 }}</input>
+            <input type="button" v-on:click="answer(questionData.id, 'sa-radio-' + questionData.id)"  value="answer" />
+        </form>
+    </div>
+
+    <div>
+        <p>結果</p>
+        <li>{{ questionData.choice1 }}: {{ answerData.count1 }}</li>
+        <li>{{ questionData.choice2 }}: {{ answerData.count2 }}</li>
+        <li>{{ questionData.choice3 }}: {{ answerData.count3 }}</li>
+        <li>{{ questionData.choice4 }}: {{ answerData.count4 }}</li>
+        <li>{{ questionData.choice5 }}: {{ answerData.count5 }}</li>
+    </div>
+
+    ********
 
 <div v-for="r in res">
-    <div class="card-divider">
+    <div>
         <p>Q. {{ r.id }} : {{ r.question }}</p>
         <form>
             <input type="radio" value="1" v-bind:name="'sa-radio-' + r.id">{{ r.choice1 }}</input>

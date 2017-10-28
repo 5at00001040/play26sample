@@ -28,9 +28,9 @@ class SaQuestionController @Inject()(cc: ControllerComponents)(qs: SaQuestionSer
     qs.readQuestion(None).map(x => SaQuestionListResult(x)).map(y => Ok(Json.toJson(y)))
   }
 
-//  def getQuestion(id: Long) = Action.async {
-//    qs.readQuestion(Some(id)).map(x => SaQuestionListResult(x)).map(y => Ok(Json.toJson(y)))
-//  }
+  def getQuestion(id: Long) = Action.async {
+    qs.readQuestion(Some(id)).map(x => SaQuestionListResult(x)).map(y => Ok(Json.toJson(y)))
+  }
 
   def postAnswer() = Action(parse.json).async { request =>
     val placeResult = request.body.validate[SaAnswerRequest]

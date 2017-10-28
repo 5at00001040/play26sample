@@ -7,7 +7,7 @@
 GET     /                           controllers.HomeController.index
 POST    /sa                         controllers.SaQuestionController.postQuestion
 GET     /sa                         controllers.SaQuestionController.getAllQuestion
-#GET     /sa/:id                     controllers.SaQuestionController.getQuestion(id: Long)
+GET     /sa/:id                     controllers.SaQuestionController.getQuestion(id: Long)
 POST    /sa/answer                  controllers.SaQuestionController.postAnswer
 GET     /sa/answer/:id              controllers.SaQuestionController.getAnswer(id: Long)
 
