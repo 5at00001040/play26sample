@@ -14,13 +14,16 @@ create table sa_question(
 
 create table sa_answer(
   id bigint not null auto_increment primary key,
-  choice int,
+  question_id bigint not null,
+  choice int not null,
   create_at timestamp default current_timestamp not null,
-  update_at timestamp default current_timestamp not null
+  update_at timestamp default current_timestamp not null,
+  foreign key (question_id) references sa_question(id)
 );
 
 # --- !Downs
 
-drop table sa_question;
 drop table sa_answer;
+drop table sa_question;
+
 

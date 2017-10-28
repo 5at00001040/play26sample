@@ -81,26 +81,35 @@ trait Tables {
 
   /** Entity class storing rows of table SaAnswer
    *  @param id Database column ID SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param questionId Database column QUESTION_ID SqlType(BIGINT)
+   *  @param choice Database column CHOICE SqlType(INTEGER)
    *  @param createAt Database column CREATE_AT SqlType(TIMESTAMP)
    *  @param updateAt Database column UPDATE_AT SqlType(TIMESTAMP) */
-  case class SaAnswerRow(id: Long, createAt: java.sql.Timestamp, updateAt: java.sql.Timestamp)
+  case class SaAnswerRow(id: Long, questionId: Long, choice: Int, createAt: java.sql.Timestamp, updateAt: java.sql.Timestamp)
   /** GetResult implicit for fetching SaAnswerRow objects using plain SQL queries */
-  implicit def GetResultSaAnswerRow(implicit e0: GR[Long], e1: GR[java.sql.Timestamp]): GR[SaAnswerRow] = GR{
+  implicit def GetResultSaAnswerRow(implicit e0: GR[Long], e1: GR[Int], e2: GR[java.sql.Timestamp]): GR[SaAnswerRow] = GR{
     prs => import prs._
-    SaAnswerRow.tupled((<<[Long], <<[java.sql.Timestamp], <<[java.sql.Timestamp]))
+    SaAnswerRow.tupled((<<[Long], <<[Long], <<[Int], <<[java.sql.Timestamp], <<[java.sql.Timestamp]))
   }
   /** Table description of table SA_ANSWER. Objects of this class serve as prototypes for rows in queries. */
   class SaAnswer(_tableTag: Tag) extends profile.api.Table[SaAnswerRow](_tableTag, "SA_ANSWER") {
-    def * = (id, createAt, updateAt) <> (SaAnswerRow.tupled, SaAnswerRow.unapply)
+    def * = (id, questionId, choice, createAt, updateAt) <> (SaAnswerRow.tupled, SaAnswerRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(id), Rep.Some(createAt), Rep.Some(updateAt)).shaped.<>({r=>import r._; _1.map(_=> SaAnswerRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(id), Rep.Some(questionId), Rep.Some(choice), Rep.Some(createAt), Rep.Some(updateAt)).shaped.<>({r=>import r._; _1.map(_=> SaAnswerRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column ID SqlType(BIGINT), AutoInc, PrimaryKey */
     val id: Rep[Long] = column[Long]("ID", O.AutoInc, O.PrimaryKey)
+    /** Database column QUESTION_ID SqlType(BIGINT) */
+    val questionId: Rep[Long] = column[Long]("QUESTION_ID")
+    /** Database column CHOICE SqlType(INTEGER) */
+    val choice: Rep[Int] = column[Int]("CHOICE")
     /** Database column CREATE_AT SqlType(TIMESTAMP) */
     val createAt: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("CREATE_AT")
     /** Database column UPDATE_AT SqlType(TIMESTAMP) */
     val updateAt: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("UPDATE_AT")
+
+    /** Foreign key referencing SaQuestion (database name CONSTRAINT_87) */
+    lazy val saQuestionFk = foreignKey("CONSTRAINT_87", questionId, SaQuestion)(r => r.id, onUpdate=ForeignKeyAction.Restrict, onDelete=ForeignKeyAction.Restrict)
   }
   /** Collection-like TableQuery object for table SaAnswer */
   lazy val SaAnswer = new TableQuery(tag => new SaAnswer(tag))

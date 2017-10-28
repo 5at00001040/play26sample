@@ -4,7 +4,7 @@ import play.api.libs.json.{Json, OFormat}
 
 case class SaQuestionRequest(req: SaQuestionModel)
 object SaQuestionRequest {
-  implicit def SaQuestionRequestFormat: OFormat[SaQuestionRequest] =
+  implicit def saQuestionRequestFormat: OFormat[SaQuestionRequest] =
     Json.format[SaQuestionRequest]
 }
 
