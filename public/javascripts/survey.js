@@ -35,6 +35,9 @@ var saList = new Vue({
         }
 
         console.log(qid + ":" + checked)
+        var param = {req: {questionId: qid, choice: Number(checked)}}
+        axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
+        axios.post("http://localhost:9000/sa/answer", param)
 
         this.loadData()
     },

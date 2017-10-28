@@ -18,6 +18,7 @@ class AdminController @Inject()(cc: ControllerComponents)(qs: SaQuestionService)
   def reset() = Action {
 
     val dbConfig = dc.get[JdbcProfile]
+    dbConfig.db.run(SaAnswer.delete)
     dbConfig.db.run(SaQuestion.delete)
 
     Ok(Json.toJson(Map("res" -> "Reset OK")))

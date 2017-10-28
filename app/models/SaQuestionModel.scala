@@ -33,3 +33,38 @@ object SaQuestionModel {
   implicit def saQuestionModelFormat: OFormat[SaQuestionModel] =
     Json.format[SaQuestionModel]
 }
+
+
+
+case class SaAnswerResult(res: SaAnswerModel)
+object SaAnswerResult {
+  implicit def saAnswerResultFormat: OFormat[SaAnswerResult] =
+    Json.format[SaAnswerResult]
+}
+
+case class SaAnswerCountModel(count1: Int,
+                         count2: Int,
+                         count3: Int,
+                         count4: Int,
+                         count5: Int)
+object SaAnswerCountModel {
+  implicit def saAnswerCountModelFormat: OFormat[SaAnswerCountModel] =
+    Json.format[SaAnswerCountModel]
+}
+
+case class SaQuestionAnswerResult(res: SaQuestionAnswer)
+object SaQuestionAnswerResult {
+  implicit def saQuestionAnswerResultFormat: OFormat[SaQuestionAnswerResult] =
+    Json.format[SaQuestionAnswerResult]
+}
+
+case class SaQuestionAnswer(question: SaQuestionModel,
+                            count1: Int,
+                            count2: Int,
+                            count3: Int,
+                            count4: Int,
+                            count5: Int)
+object SaQuestionAnswer {
+  implicit def saQuestionAnswerFormat: OFormat[SaQuestionAnswer] =
+    Json.format[SaQuestionAnswer]
+}

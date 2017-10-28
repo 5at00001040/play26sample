@@ -3,7 +3,7 @@ package controllers
 import javax.inject._
 
 import domain.SaQuestionService
-import models.{SaQuestionListResult, SaQuestionModel, SaQuestionRequest, SaQuestionResult}
+import models._
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -16,26 +16,38 @@ class SaQuestionController @Inject()(cc: ControllerComponents)(qs: SaQuestionSer
   dc: DatabaseConfigProvider)
   extends AbstractController(cc) {
 
-
-//  def survey() = Action {
-//    Ok(views.html.survey())
-//  }
-
-  def post() = Action(parse.json).async { request =>
+  def postQuestion() = Action(parse.json).async { request =>
     val placeResult = request.body.validate[SaQuestionRequest]
-    val createId: Future[Long] = placeResult.map(j => qs.create(j.req)).getOrElse(Future(0))
+    val createId: Future[Long] = placeResult.map(j => qs.createQuestion(j.req)).getOrElse(Future(0))
     createId
       .map(x => SaQuestionResult(SaQuestionModel(id = Some(x))))
       .map(y => Ok(Json.toJson(y)))
   }
 
-  def getAll() = Action.async {
-    qs.read(None).map(x => SaQuestionListResult(x)).map(y => Ok(Json.toJson(y)))
+  def getAllQuestion() = Action.async {
+    qs.readQuestion(None).map(x => SaQuestionListResult(x)).map(y => Ok(Json.toJson(y)))
   }
 
-  def get(id: Long) = Action.async {
-    qs.read(Some(id)).map(x => SaQuestionListResult(x)).map(y => Ok(Json.toJson(y)))
+//  def getQuestion(id: Long) = Action.async {
+//    qs.readQuestion(Some(id)).map(x => SaQuestionListResult(x)).map(y => Ok(Json.toJson(y)))
+//  }
+
+  def postAnswer() = Action(parse.json).async { request =>
+    val placeResult = request.body.validate[SaAnswerRequest]
+
+    val (questionId, choice) = placeResult.map(a => (a.req.questionId, a.req.choice)).getOrElse((0L, 0))
+
+    val createId: Future[Long] = placeResult.map(j => qs.createAnswer(questionId, choice)).getOrElse(Future(0))
+    createId
+      .map(x => SaQuestionResult(SaQuestionModel(id = Some(x))))
+      .map(y => Ok(Json.toJson(y)))
   }
+
+  def getAnswer(id: Long) = Action.async {
+    qs.countAnswer(id).map(x => SaAnswerCountModel(x._1, x._2, x._3, x._4, x._5)).map(y => Ok(Json.toJson(y)))
+  }
+
+
 
 
 }

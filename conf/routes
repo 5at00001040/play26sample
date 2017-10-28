@@ -5,9 +5,11 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
-POST    /sa                         controllers.SaQuestionController.post
-GET     /sa                         controllers.SaQuestionController.getAll
-GET     /sa/:id                     controllers.SaQuestionController.get(id: Long)
+POST    /sa                         controllers.SaQuestionController.postQuestion
+GET     /sa                         controllers.SaQuestionController.getAllQuestion
+#GET     /sa/:id                     controllers.SaQuestionController.getQuestion(id: Long)
+POST    /sa/answer                  controllers.SaQuestionController.postAnswer
+GET     /sa/answer/:id              controllers.SaQuestionController.getAnswer(id: Long)
 
 GET     /reset                      controllers.AdminController.reset
 POST    /reset                      controllers.AdminController.reset

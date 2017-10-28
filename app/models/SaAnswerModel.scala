@@ -14,7 +14,7 @@ object SaAnswerListResult {
     Json.format[SaAnswerListResult]
 }
 
-case class SaAnswerModel(id: Long,
+case class SaAnswerModel(id: Option[Long],
                          questionId: Long,
                          choice: Int,
                          createAt: Option[String] = None,
