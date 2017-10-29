@@ -46,4 +46,11 @@ CDN使う場合はapplication.confにcontentSecurityPolicyを設定する必要�
 今回のように静的ページからPOSTする場合CSRFのトークンが使えないので、csrfのチェックを行わない条件にするヘッダーの指定をする  
 play.filters.csrf.header.bypassHeaders
 
+play.crypto.secret="適当な値に変える"
+
+### 起動停止
+
+sbt "start 9000 -DapplyEvolutions.default=true"
+
+kill $(cat target/universal/stage/RUNNING_PID)
 
