@@ -3,11 +3,33 @@
 <head>
     <meta charset="utf-8">
     <style type="text/css">
-    <!--
-    #sa-app {
-        margin: 40px;
-    }
-    -->
+<!--
+#sa-app {
+    margin: 40px;
+}
+
+.input-question {
+    width: 100%;
+}
+
+.input-choice {
+    width: 50%;
+}
+
+.q-label {
+    padding: 7px 0px;
+}
+
+.content-block {
+    margin: 12px 0px 12px;
+//    padding: 10px 12px 0px;
+    padding-top: 16px;
+    border-style: solid;
+    border-width: thin;
+    border-color: #555;
+}
+
+-->
     </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" rel="stylesheet" type="text/css">
 </head>
@@ -17,77 +39,102 @@
 
     <h2>アンケートシステムデモ</h2>
 
-    <div>
-        <input type="button" v-on:click="resetData" value="Reset" />
+
+    <div class="content-block">
+        <div class="container">
+            <h4>1. 新しいアンケートを作成する</h4>
+            <form>
+                <div class="row">
+                    <div class="two columns q-label">質問</div><div class="ten columns"><input type="text" v-model="question" class="input-question" placeholder="質問を入力してください"></div>
+                </div>
+                <div class="row">
+                    <div class="two columns q-label">選択肢1</div><div class="ten columns"><input type="text" v-model="choice1" class="input-choice" placeholder="選択肢を入力してください"></div>
+                </div>
+                <div class="row">
+                    <div class="two columns q-label">選択肢2</div><div class="ten columns"><input type="text" v-model="choice2" class="input-choice" placeholder="選択肢を入力してください"></div>
+                </div>
+                <div class="row">
+                    <div class="two columns q-label">選択肢3</div><div class="ten columns"><input type="text" v-model="choice3" class="input-choice" placeholder="選択肢を入力してください"></div>
+                </div>
+                <div class="row">
+                    <div class="two columns q-label">選択肢4</div><div class="ten columns"><input type="text" v-model="choice4" class="input-choice" placeholder="選択肢を入力してください"></div>
+                </div>
+                <div class="row">
+                    <div class="two columns q-label">選択肢5</div><div class="ten columns"><input type="text" v-model="choice5" class="input-choice" placeholder="選択肢を入力してください"></div>
+                </div>
+                <input type="button" v-on:click="pushQuestion" value="質問作成" />
+            </form>
+        </div>
     </div>
 
-    <h4>新しいアンケートを作成する</h4>
-    <div>
-        <form>
-            <div><input type="text" v-model="question" placeholder="質問を入力してください"></div>
-            <div><input type="text" v-model="choice1" placeholder="選択肢を入力してください"></div>
-            <div><input type="text" v-model="choice2" placeholder="選択肢を入力してください"></div>
-            <div><input type="text" v-model="choice3" placeholder="選択肢を入力してください"></div>
-            <div><input type="text" v-model="choice4" placeholder="選択肢を入力してください"></div>
-            <div><input type="text" v-model="choice5" placeholder="選択肢を入力してください"></div>
-            <div><input type="button" v-on:click="pushQuestion" value="Create" /></div>
-        </form>
+    <div class="content-block">
+        <div class="container">
+            <h4>2. アンケート選択</h4>
+            <select v-model="selectQuestionId" v-on:change="changeQuestion">
+                <option v-for="q in questionIdList" v-bind:value="q.id">Q. {{ q.id }} {{ q.question }}</option>
+            </select>
+        </div>
     </div>
 
-    <h4>アンケート選択</h4>
-    <select v-model="selectQuestionId" v-on:change="changeQuestion">
-        <option v-for="q in questionIdList" v-bind:value="q.id">{{ q.id }} : {{ q.question }}</option>
-    </select>
-
-
-    <h4>Q. {{ questionData.id }} {{ questionData.question }}</h4>
-    <div>
-        <form>
-            <label>
-                <input type="radio" value="1" v-bind:name="'sa-radio-' + questionData.id" />
-                <span class="label-body">{{ questionData.choice1 }}</span>
-            </label>
-            <label>
-                <input type="radio" value="2" v-bind:name="'sa-radio-' + questionData.id" />
-                <span class="label-body">{{ questionData.choice2 }}</span>
-            </label>
-            <label>
-                <input type="radio" value="3" v-bind:name="'sa-radio-' + questionData.id" />
-                <span class="label-body">{{ questionData.choice3 }}</span>
-            </label>
-            <label>
-                <input type="radio" value="4" v-bind:name="'sa-radio-' + questionData.id" />
-                <span class="label-body">{{ questionData.choice4 }}</span>
-            </label>
-            <label>
-                <input type="radio" value="5" v-bind:name="'sa-radio-' + questionData.id" />
-                <span class="label-body">{{ questionData.choice5 }}</span>
-            </label>
-            <input type="button" v-on:click="pushAnswer(questionData.id, 'sa-radio-' + questionData.id)"  value="Answer" />
-        </form>
+    <div class="content-block">
+        <div class="container">
+            <h4>3. アンケート実施</h4>
+            <h5>Q. {{ questionData.id }} {{ questionData.question }}</h5>
+            <form>
+                <label>
+                    <input type="radio" value="1" v-bind:name="'sa-radio-' + questionData.id" />
+                    <span class="label-body">{{ questionData.choice1 }}</span>
+                </label>
+                <label>
+                    <input type="radio" value="2" v-bind:name="'sa-radio-' + questionData.id" />
+                    <span class="label-body">{{ questionData.choice2 }}</span>
+                </label>
+                <label>
+                    <input type="radio" value="3" v-bind:name="'sa-radio-' + questionData.id" />
+                    <span class="label-body">{{ questionData.choice3 }}</span>
+                </label>
+                <label>
+                    <input type="radio" value="4" v-bind:name="'sa-radio-' + questionData.id" />
+                    <span class="label-body">{{ questionData.choice4 }}</span>
+                </label>
+                <label>
+                    <input type="radio" value="5" v-bind:name="'sa-radio-' + questionData.id" />
+                    <span class="label-body">{{ questionData.choice5 }}</span>
+                </label>
+                <input type="button" v-on:click="pushAnswer(questionData.id, 'sa-radio-' + questionData.id)"  value="回答" />
+            </form>
+        </div>
     </div>
 
-    <h4>アンケート結果</h4>
-    <table>
-        <thead>
-        <tr>
-            <th>{{ questionData.choice1 }}</th>
-            <th>{{ questionData.choice2 }}</th>
-            <th>{{ questionData.choice3 }}</th>
-            <th>{{ questionData.choice4 }}</th>
-            <th>{{ questionData.choice5 }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>{{ answerData.count1 }}</td>
-            <td>{{ answerData.count2 }}</td>
-            <td>{{ answerData.count3 }}</td>
-            <td>{{ answerData.count4 }}</td>
-            <td>{{ answerData.count5 }}</td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="content-block">
+        <div class="container">
+            <h4>4. アンケート結果</h4>
+            <table>
+                <thead>
+                <tr>
+                    <th>{{ questionData.choice1 }}</th>
+                    <th>{{ questionData.choice2 }}</th>
+                    <th>{{ questionData.choice3 }}</th>
+                    <th>{{ questionData.choice4 }}</th>
+                    <th>{{ questionData.choice5 }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ answerData.count1 }}</td>
+                    <td>{{ answerData.count2 }}</td>
+                    <td>{{ answerData.count3 }}</td>
+                    <td>{{ answerData.count4 }}</td>
+                    <td>{{ answerData.count5 }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div>
+        <input type="button" v-on:click="resetData" value="全データ削除" />
+    </div>
 
 </div>
 
