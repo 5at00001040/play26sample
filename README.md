@@ -50,6 +50,7 @@ play.crypto.secret="適当な値に変える"
 
 ### 起動停止
 
+sbt "start 9000"
 sbt "start 9000 -DapplyEvolutions.default=true"
 
 kill $(cat target/universal/stage/RUNNING_PID)

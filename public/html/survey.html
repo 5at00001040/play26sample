@@ -9,54 +9,85 @@
     }
     -->
     </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
 <div id="sa-app">
 
+    <h2>アンケートシステムデモ</h2>
+
     <div>
         <input type="button" v-on:click="resetData" value="Reset" />
     </div>
 
-    <h2>新しいアンケートを作成する</h2>
+    <h4>新しいアンケートを作成する</h4>
     <div>
         <form>
-            <div><input type="text" v-model="question"></div>
-            <div><input type="text" v-model="choice1"></div>
-            <div><input type="text" v-model="choice2"></div>
-            <div><input type="text" v-model="choice3"></div>
-            <div><input type="text" v-model="choice4"></div>
-            <div><input type="text" v-model="choice5"></div>
+            <div><input type="text" v-model="question" placeholder="質問を入力してください"></div>
+            <div><input type="text" v-model="choice1" placeholder="選択肢を入力してください"></div>
+            <div><input type="text" v-model="choice2" placeholder="選択肢を入力してください"></div>
+            <div><input type="text" v-model="choice3" placeholder="選択肢を入力してください"></div>
+            <div><input type="text" v-model="choice4" placeholder="選択肢を入力してください"></div>
+            <div><input type="text" v-model="choice5" placeholder="選択肢を入力してください"></div>
             <div><input type="button" v-on:click="pushQuestion" value="Create" /></div>
         </form>
     </div>
 
-    <h2>アンケート選択</h2>
+    <h4>アンケート選択</h4>
     <select v-model="selectQuestionId" v-on:change="changeQuestion">
         <option v-for="q in questionIdList" v-bind:value="q.id">{{ q.id }} : {{ q.question }}</option>
     </select>
 
 
-    <h2>Q. {{ questionData.id }} {{ questionData.question }}</h2>
+    <h4>Q. {{ questionData.id }} {{ questionData.question }}</h4>
     <div>
         <form>
-            <div>{{ questionData.choice1 }}<input type="radio" value="1" v-bind:name="'sa-radio-' + questionData.id" /></div>
-            <div>{{ questionData.choice2 }}<input type="radio" value="2" v-bind:name="'sa-radio-' + questionData.id" /></div>
-            <div>{{ questionData.choice3 }}<input type="radio" value="3" v-bind:name="'sa-radio-' + questionData.id" /></div>
-            <div>{{ questionData.choice4 }}<input type="radio" value="4" v-bind:name="'sa-radio-' + questionData.id" /></div>
-            <div>{{ questionData.choice5 }}<input type="radio" value="5" v-bind:name="'sa-radio-' + questionData.id" /></div>
-            <div><input type="button" v-on:click="pushAnswer(questionData.id, 'sa-radio-' + questionData.id)"  value="answer" /></div>
+            <label>
+                <input type="radio" value="1" v-bind:name="'sa-radio-' + questionData.id" />
+                <span class="label-body">{{ questionData.choice1 }}</span>
+            </label>
+            <label>
+                <input type="radio" value="2" v-bind:name="'sa-radio-' + questionData.id" />
+                <span class="label-body">{{ questionData.choice2 }}</span>
+            </label>
+            <label>
+                <input type="radio" value="3" v-bind:name="'sa-radio-' + questionData.id" />
+                <span class="label-body">{{ questionData.choice3 }}</span>
+            </label>
+            <label>
+                <input type="radio" value="4" v-bind:name="'sa-radio-' + questionData.id" />
+                <span class="label-body">{{ questionData.choice4 }}</span>
+            </label>
+            <label>
+                <input type="radio" value="5" v-bind:name="'sa-radio-' + questionData.id" />
+                <span class="label-body">{{ questionData.choice5 }}</span>
+            </label>
+            <input type="button" v-on:click="pushAnswer(questionData.id, 'sa-radio-' + questionData.id)"  value="Answer" />
         </form>
     </div>
 
-    <h2>アンケート結果</h2>
-    <div>
-        <li>{{ questionData.choice1 }} {{ answerData.count1 }}</li>
-        <li>{{ questionData.choice2 }} {{ answerData.count2 }}</li>
-        <li>{{ questionData.choice3 }} {{ answerData.count3 }}</li>
-        <li>{{ questionData.choice4 }} {{ answerData.count4 }}</li>
-        <li>{{ questionData.choice5 }} {{ answerData.count5 }}</li>
-    </div>
+    <h4>アンケート結果</h4>
+    <table>
+        <thead>
+        <tr>
+            <th>{{ questionData.choice1 }}</th>
+            <th>{{ questionData.choice2 }}</th>
+            <th>{{ questionData.choice3 }}</th>
+            <th>{{ questionData.choice4 }}</th>
+            <th>{{ questionData.choice5 }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ answerData.count1 }}</td>
+            <td>{{ answerData.count2 }}</td>
+            <td>{{ answerData.count3 }}</td>
+            <td>{{ answerData.count4 }}</td>
+            <td>{{ answerData.count5 }}</td>
+        </tr>
+        </tbody>
+    </table>
 
 </div>
 

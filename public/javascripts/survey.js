@@ -1,12 +1,12 @@
 var saList = new Vue({
   el: '#sa-app',
   data: {
-    question: "質問を入力してください",
-    choice1: "選択肢を入力してください",
-    choice2: "選択肢を入力してください",
-    choice3: "選択肢を入力してください",
-    choice4: "選択肢を入力してください",
-    choice5: "選択肢を入力してください",
+    question: "",
+    choice1: "",
+    choice2: "",
+    choice3: "",
+    choice4: "",
+    choice5: "",
     questionIdList: [],
     selectQuestionId: 0,
     questionData: {},
