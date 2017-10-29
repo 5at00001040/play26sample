@@ -14,9 +14,6 @@ var saList = new Vue({
   },
   mounted: function () {
     this.pullQuestionIdList()
-//    this.selectQuestionId = this.questionIdList[0].id
-//    this.pullQuestion()
-//    this.pullAnswer()
   },
   methods: {
     pullQuestionIdList: function () {
@@ -32,13 +29,15 @@ var saList = new Vue({
       .then(response => {this.answerData = response.data})
     },
     changeQuestion: function () {
-        this.refresh()
+        this.pullQuestionIdList()
+        this.pullQuestion()
+        this.pullAnswer()
     },
     pushQuestion: function () {
         var param = {req: {question: this.question, choice1: this.choice1, choice2: this.choice2, choice3: this.choice3, choice4: this.choice4, choice5: this.choice5}}
         axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
         axios.post("http://localhost:9000/sa", param)
-        this.refresh()
+        this.pullQuestionIdList()
     },
     pushAnswer: function (qid, radioName) {
         var elements = document.getElementsByName(radioName)
@@ -51,17 +50,15 @@ var saList = new Vue({
         var param = {req: {questionId: qid, choice: Number(checked)}}
         axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
         axios.post("http://localhost:9000/sa/answer", param)
-        this.refresh()
-    },
-    refresh: function () {
-        this.pullQuestionIdList()
-        this.pullQuestion()
         this.pullAnswer()
     },
     resetData: function () {
         axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
         axios.post("http://localhost:9000/reset")
-        this.refresh()
+        this.questionIdList = []
+        this.selectQuestionId = 0
+        this.questionData = {},
+        this.answerData = {}
     }
   }
 });

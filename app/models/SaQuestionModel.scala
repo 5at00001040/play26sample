@@ -34,7 +34,11 @@ object SaQuestionModel {
     Json.format[SaQuestionModel]
 }
 
-
+case class SaAnswerRequest(req: SaAnswerModel)
+object SaAnswerRequest {
+  implicit def saAnswerRequestFormat: OFormat[SaAnswerRequest] =
+    Json.format[SaAnswerRequest]
+}
 
 case class SaAnswerResult(res: SaAnswerModel)
 object SaAnswerResult {
@@ -52,19 +56,13 @@ object SaAnswerCountModel {
     Json.format[SaAnswerCountModel]
 }
 
-case class SaQuestionAnswerResult(res: SaQuestionAnswer)
-object SaQuestionAnswerResult {
-  implicit def saQuestionAnswerResultFormat: OFormat[SaQuestionAnswerResult] =
-    Json.format[SaQuestionAnswerResult]
+case class SaAnswerModel(id: Option[Long],
+                         questionId: Long,
+                         choice: Int,
+                         createAt: Option[String] = None,
+                         updateAt: Option[String] = None)
+object SaAnswerModel {
+  implicit def saAnswerModelFormat: OFormat[SaAnswerModel] =
+    Json.format[SaAnswerModel]
 }
 
-case class SaQuestionAnswer(question: SaQuestionModel,
-                            count1: Int,
-                            count2: Int,
-                            count3: Int,
-                            count4: Int,
-                            count5: Int)
-object SaQuestionAnswer {
-  implicit def saQuestionAnswerFormat: OFormat[SaQuestionAnswer] =
-    Json.format[SaQuestionAnswer]
-}
