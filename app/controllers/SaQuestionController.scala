@@ -46,8 +46,4 @@ class SaQuestionController @Inject()(cc: ControllerComponents)(qs: SaQuestionSer
   def getAnswer(id: Long) = Action.async {
     qs.countAnswer(id).map(x => SaAnswerCountModel(x._1, x._2, x._3, x._4, x._5)).map(y => Ok(Json.toJson(y)))
   }
-
-
-
-
 }

@@ -82,27 +82,39 @@ trait Tables {
   /** Entity class storing rows of table SaAnswer
    *  @param id Database column ID SqlType(BIGINT), AutoInc, PrimaryKey
    *  @param questionId Database column QUESTION_ID SqlType(BIGINT)
-   *  @param choice Database column CHOICE SqlType(INTEGER)
+   *  @param choice1 Database column CHOICE1 SqlType(INTEGER)
+   *  @param choice2 Database column CHOICE2 SqlType(INTEGER)
+   *  @param choice3 Database column CHOICE3 SqlType(INTEGER)
+   *  @param choice4 Database column CHOICE4 SqlType(INTEGER)
+   *  @param choice5 Database column CHOICE5 SqlType(INTEGER)
    *  @param createAt Database column CREATE_AT SqlType(TIMESTAMP)
    *  @param updateAt Database column UPDATE_AT SqlType(TIMESTAMP) */
-  case class SaAnswerRow(id: Long, questionId: Long, choice: Int, createAt: java.sql.Timestamp, updateAt: java.sql.Timestamp)
+  case class SaAnswerRow(id: Long, questionId: Long, choice1: Option[Int], choice2: Option[Int], choice3: Option[Int], choice4: Option[Int], choice5: Option[Int], createAt: java.sql.Timestamp, updateAt: java.sql.Timestamp)
   /** GetResult implicit for fetching SaAnswerRow objects using plain SQL queries */
-  implicit def GetResultSaAnswerRow(implicit e0: GR[Long], e1: GR[Int], e2: GR[java.sql.Timestamp]): GR[SaAnswerRow] = GR{
+  implicit def GetResultSaAnswerRow(implicit e0: GR[Long], e1: GR[Option[Int]], e2: GR[java.sql.Timestamp]): GR[SaAnswerRow] = GR{
     prs => import prs._
-    SaAnswerRow.tupled((<<[Long], <<[Long], <<[Int], <<[java.sql.Timestamp], <<[java.sql.Timestamp]))
+    SaAnswerRow.tupled((<<[Long], <<[Long], <<?[Int], <<?[Int], <<?[Int], <<?[Int], <<?[Int], <<[java.sql.Timestamp], <<[java.sql.Timestamp]))
   }
   /** Table description of table SA_ANSWER. Objects of this class serve as prototypes for rows in queries. */
   class SaAnswer(_tableTag: Tag) extends profile.api.Table[SaAnswerRow](_tableTag, "SA_ANSWER") {
-    def * = (id, questionId, choice, createAt, updateAt) <> (SaAnswerRow.tupled, SaAnswerRow.unapply)
+    def * = (id, questionId, choice1, choice2, choice3, choice4, choice5, createAt, updateAt) <> (SaAnswerRow.tupled, SaAnswerRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(id), Rep.Some(questionId), Rep.Some(choice), Rep.Some(createAt), Rep.Some(updateAt)).shaped.<>({r=>import r._; _1.map(_=> SaAnswerRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(id), Rep.Some(questionId), choice1, choice2, choice3, choice4, choice5, Rep.Some(createAt), Rep.Some(updateAt)).shaped.<>({r=>import r._; _1.map(_=> SaAnswerRow.tupled((_1.get, _2.get, _3, _4, _5, _6, _7, _8.get, _9.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column ID SqlType(BIGINT), AutoInc, PrimaryKey */
     val id: Rep[Long] = column[Long]("ID", O.AutoInc, O.PrimaryKey)
     /** Database column QUESTION_ID SqlType(BIGINT) */
     val questionId: Rep[Long] = column[Long]("QUESTION_ID")
-    /** Database column CHOICE SqlType(INTEGER) */
-    val choice: Rep[Int] = column[Int]("CHOICE")
+    /** Database column CHOICE1 SqlType(INTEGER) */
+    val choice1: Rep[Option[Int]] = column[Option[Int]]("CHOICE1")
+    /** Database column CHOICE2 SqlType(INTEGER) */
+    val choice2: Rep[Option[Int]] = column[Option[Int]]("CHOICE2")
+    /** Database column CHOICE3 SqlType(INTEGER) */
+    val choice3: Rep[Option[Int]] = column[Option[Int]]("CHOICE3")
+    /** Database column CHOICE4 SqlType(INTEGER) */
+    val choice4: Rep[Option[Int]] = column[Option[Int]]("CHOICE4")
+    /** Database column CHOICE5 SqlType(INTEGER) */
+    val choice5: Rep[Option[Int]] = column[Option[Int]]("CHOICE5")
     /** Database column CREATE_AT SqlType(TIMESTAMP) */
     val createAt: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("CREATE_AT")
     /** Database column UPDATE_AT SqlType(TIMESTAMP) */

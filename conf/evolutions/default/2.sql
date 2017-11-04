@@ -12,10 +12,15 @@ create table sa_question(
   update_at timestamp default current_timestamp not null
 );
 
+
 create table sa_answer(
   id bigint not null auto_increment primary key,
   question_id bigint not null,
-  choice int not null,
+  choice1 int,
+  choice2 int,
+  choice3 int,
+  choice4 int,
+  choice5 int,
   create_at timestamp default current_timestamp not null,
   update_at timestamp default current_timestamp not null,
   foreign key (question_id) references sa_question(id)

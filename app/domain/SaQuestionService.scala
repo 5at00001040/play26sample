@@ -92,7 +92,11 @@ class SaQuestionService @Inject()(dc: DatabaseConfigProvider) {
       SaAnswer returning SaAnswer.map(_.id) += SaAnswerRow(
         id = 0,
         questionId = questionId,
-        choice = choice,
+        choice1 = if (choice == 1) Some(1) else None,
+        choice2 = if (choice == 2) Some(1) else None,
+        choice3 = if (choice == 3) Some(1) else None,
+        choice4 = if (choice == 4) Some(1) else None,
+        choice5 = if (choice == 5) Some(1) else None,
         createAt = nowTime,
         updateAt = nowTime
       )
@@ -100,7 +104,7 @@ class SaQuestionService @Inject()(dc: DatabaseConfigProvider) {
   }
 
   /**
-    * 質問ごとに回答結果の合計を返す
+    * 指定されたquestionIdの回答結果の合計を返す
     * @param questionId 質問id
     * @return
     */
@@ -110,25 +114,19 @@ class SaQuestionService @Inject()(dc: DatabaseConfigProvider) {
 
     val query = SaAnswer
       .filter(_.questionId === questionId)
-      .groupBy(_.choice)
-      .map { case (s, results) => s -> results.length }
+      .groupBy(_.questionId)
+      .map {
+        case (_, grp) => {
+          (grp.map(x => x.choice1).sum.getOrElse(0),
+           grp.map(x => x.choice2).sum.getOrElse(0),
+           grp.map(x => x.choice3).sum.getOrElse(0),
+           grp.map(x => x.choice4).sum.getOrElse(0),
+           grp.map(x => x.choice5).sum.getOrElse(0))
+        }
+      }
       .result
 
-    val res: Future[Seq[(Int, Int)]] = dbConfig.db.run(query)
-
-    res.map(a => {
-      a.map {
-          case (1, x) => (x, 0, 0, 0, 0)
-          case (2, x) => (0, x, 0, 0, 0)
-          case (3, x) => (0, 0, x, 0, 0)
-          case (4, x) => (0, 0, 0, x, 0)
-          case (5, x) => (0, 0, 0, 0, x)
-          case _      => (0, 0, 0, 0, 0)
-        }
-        .foldLeft((0, 0, 0, 0, 0)) { (a, b) =>
-          (a._1 + b._1, a._2 + b._2, a._3 + b._3, a._4 + b._4, a._5 + b._5)
-        }
-    })
-
+    val res: Future[Seq[(Int, Int, Int, Int, Int)]] = dbConfig.db.run(query)
+    res.map(_.head)
   }
 }
