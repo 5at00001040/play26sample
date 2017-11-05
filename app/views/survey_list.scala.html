@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <style type="text/css">
+<!--
+
+-->
+    </style>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div id="survey-app">
+
+  <h2>アンケート一覧</h2>
+  <div>
+    <select>
+      <option v-for="sl in surveyList" v-bind:value="sl.id">Q. {{ sl.id }} {{ sl.title }}</option>
+    </select>
+  </div>
+
+  <div>
+    <form>
+      <div>
+        <div>アンケート名</div>
+        <div>
+          <input type="text" v-model="surveyTitle" placeholder="アンケート名を入力してください">
+        </div>
+      </div>
+      <input type="button" v-on:click="postSurvey" value="アンケート作成" />
+    </form>
+  </div>
+
+
+</div>
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="../assets/javascripts/survey-v2.js"></script>
+</body>
+</html>

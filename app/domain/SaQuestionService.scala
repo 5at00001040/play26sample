@@ -29,6 +29,7 @@ class SaQuestionService @Inject()(dc: DatabaseConfigProvider) {
     dbConfig.db.run(
       SaQuestion returning SaQuestion.map(_.id) += SaQuestionRow(
         id = 0,
+        surveyId = 0, // TODO
         question = q.question,
         choice1 = q.choice1,
         choice2 = q.choice2,
