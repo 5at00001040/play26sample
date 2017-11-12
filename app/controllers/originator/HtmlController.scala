@@ -7,9 +7,11 @@ import play.api.mvc._
 class HtmlController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
   def surveyList() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.survey_list())
+    Ok(views.html.originator.survey_list())
   }
 
-
+  def questionList(surveyId: Long) = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.originator.question_list(surveyId))
+  }
 
 }

@@ -11,13 +11,26 @@
 </head>
 <body>
 
-<div id="survey-app">
+<div id="survey-list">
 
   <h2>アンケート一覧</h2>
   <div>
-    <select>
-      <option v-for="sl in surveyList" v-bind:value="sl.id">Q. {{ sl.id }} {{ sl.title }}</option>
-    </select>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>タイトル</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="sl in surveyList">
+        <td>{{ sl.id }}</td>
+        <td>{{ sl.title }}</td>
+        <td><a v-bind:href="'/originator/question/' + sl.id">アンケートを編集する</a></td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 
   <div>
@@ -37,6 +50,6 @@
 
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="../assets/javascripts/survey-v2.js"></script>
+<script src="/assets/javascripts/originator/survey.js"></script>
 </body>
 </html>

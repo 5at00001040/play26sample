@@ -29,7 +29,7 @@ class SaQuestionService @Inject()(dc: DatabaseConfigProvider) {
     dbConfig.db.run(
       SaQuestion returning SaQuestion.map(_.id) += SaQuestionRow(
         id = 0,
-        surveyId = 0, // TODO
+        surveyId = q.surveyId.getOrElse(0),
         question = q.question,
         choice1 = q.choice1,
         choice2 = q.choice2,
@@ -44,27 +44,30 @@ class SaQuestionService @Inject()(dc: DatabaseConfigProvider) {
 
   /**
     * 質問をDBから読み込む
-    * id指定の場合は対象の質問1件を返し、指定がない場合は全件取得する
+    * パラメーターで指定されたアンケートのリストを返す
     * @param id 検索対象の質問のid
+    * @param surveyId アンケートのid
     * @return
     */
-  def readQuestion(id: Option[Long]): Future[Seq[SaQuestionModel]] = {
+  def readQuestion(id: Option[Long], surveyId: Option[Long]): Future[Seq[SaQuestionModel]] = {
 
     val dbConfig = dc.get[JdbcProfile]
 
     val query = if (id.isDefined) {
       SaQuestion.filter(_.id === id.get).result
+    } else if (surveyId.isDefined) {
+      SaQuestion.filter(_.surveyId === surveyId.get).result
     } else {
       SaQuestion.result
     }
 
-    val res: Future[Seq[SaQuestionRow]] =
-      dbConfig.db.run(query)
+    val res: Future[Seq[SaQuestionRow]] = dbConfig.db.run(query)
 
     res.map(
       _.map(r =>
         SaQuestionModel(
           id = Some(r.id),
+          surveyId = Some(r.surveyId),
           question = r.question,
           choice1 = r.choice1,
           choice2 = r.choice2,

@@ -9,7 +9,8 @@ GET     /                           controllers.HomeController.index
 
 
 # HTML Originator
-GET     /originator/survey          controllers.originator.HtmlController.surveyList
+GET     /originator/survey                controllers.originator.HtmlController.surveyList
+GET     /originator/question/:surveyId    controllers.originator.HtmlController.questionList(surveyId: Long)
 
 # HTML User
 GET     /user                       controllers.user.HtmlController.index
@@ -22,6 +23,9 @@ POST    /api/sa/answer              controllers.api.SaQuestionController.postAns
 GET     /api/sa/answer/:id          controllers.api.SaQuestionController.getAnswer(id: Long)
 POST    /api/survey                 controllers.api.SurveyController.postSurvey
 GET     /api/survey                 controllers.api.SurveyController.getAllSurvey
+
+GET     /api/question/sid/:sid      controllers.api.SaQuestionController.getQuestionBySurveyId(sid: Long)
+POST    /api/question               controllers.api.SaQuestionController.postQuestion
 
 # Admin
 GET     /admin                      controllers.admin.AdminController.index

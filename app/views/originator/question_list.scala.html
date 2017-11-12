@@ -1,0 +1,72 @@
+@(surveyId: Long)
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <style type="text/css">
+<!--
+
+-->
+    </style>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div id="question-list">
+
+  <h2>質問リスト</h2>
+  <div id="surveyId">@surveyId</div>
+
+  <div>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>質問</th>
+        <th>選択肢1</th>
+        <th>選択肢2</th>
+        <th>選択肢3</th>
+        <th>選択肢4</th>
+        <th>選択肢5</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="ql in questionList">
+        <td>{{ ql.id }}</td>
+        <td>{{ ql.question }}</td>
+        <td>{{ ql.choice1 }}</td>
+        <td>{{ ql.choice2 }}</td>
+        <td>{{ ql.choice3 }}</td>
+        <td>{{ ql.choice4 }}</td>
+        <td>{{ ql.choice5 }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div>
+    <form>
+      <div>
+        <div>追加</div>
+        <div>
+          <input type="text" v-model="question" placeholder="質問を入力してください">
+          <input type="text" v-model="choice1" placeholder="選択肢1を入力してください">
+          <input type="text" v-model="choice2" placeholder="選択肢2を入力してください">
+          <input type="text" v-model="choice3" placeholder="選択肢3を入力してください">
+          <input type="text" v-model="choice4" placeholder="選択肢4を入力してください">
+          <input type="text" v-model="choice5" placeholder="選択肢5を入力してください">
+        </div>
+      </div>
+      <input type="button" v-on:click="postQuestion" value="質問追加" />
+    </form>
+  </div>
+
+
+
+</div>
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/assets/javascripts/originator/survey.js"></script>
+</body>
+</html>
