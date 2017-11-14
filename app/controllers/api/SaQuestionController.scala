@@ -24,6 +24,14 @@ class SaQuestionController @Inject()(cc: ControllerComponents)(qs: SaQuestionSer
       .map(y => Ok(Json.toJson(y)))
   }
 
+  def putQuestion() = Action(parse.json).async { request =>
+    val placeResult = request.body.validate[SaQuestionRequest]
+    val updateCount: Future[Int] = placeResult.map(j => qs.updateQuestion(j.req)).getOrElse(Future(0))
+    updateCount
+      .map(x => SaQuestionResult(SaQuestionModel(id = Some(x))))
+      .map(y => Ok(Json.toJson(y)))
+  }
+
   def getAllQuestion() = Action.async {
     qs.readQuestion(None, None).map(x => SaQuestionListResult(x)).map(y => Ok(Json.toJson(y)))
   }
@@ -34,6 +42,13 @@ class SaQuestionController @Inject()(cc: ControllerComponents)(qs: SaQuestionSer
 
   def getQuestion(id: Long) = Action.async {
     qs.readQuestion(Some(id), None).map(x => SaQuestionListResult(x)).map(y => Ok(Json.toJson(y)))
+  }
+
+  def deleteQuestion(id: Long) = Action(parse.json).async {
+    val deleteCount: Future[Int] = qs.deleteQuestion(id)
+    deleteCount
+      .map(x => SaQuestionResult(SaQuestionModel(id = Some(x))))
+      .map(y => Ok(Json.toJson(y)))
   }
 
   def postAnswer() = Action(parse.json).async { request =>

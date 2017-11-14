@@ -17,8 +17,10 @@ GET     /user                       controllers.user.HtmlController.index
 
 # API
 POST    /api/sa                     controllers.api.SaQuestionController.postQuestion
+PUT     /api/sa                     controllers.api.SaQuestionController.putQuestion
 GET     /api/sa                     controllers.api.SaQuestionController.getAllQuestion
 GET     /api/sa/:id                 controllers.api.SaQuestionController.getQuestion(id: Long)
+DELETE  /api/sa/:id                 controllers.api.SaQuestionController.deleteQuestion(id: Long)
 POST    /api/sa/answer              controllers.api.SaQuestionController.postAnswer
 GET     /api/sa/answer/:id          controllers.api.SaQuestionController.getAnswer(id: Long)
 POST    /api/survey                 controllers.api.SurveyController.postSurvey
