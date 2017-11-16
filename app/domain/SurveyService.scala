@@ -2,7 +2,7 @@ package domain
 
 import javax.inject.{Inject, Singleton}
 
-import models.{SaQuestionModel, SurveyModel}
+import models.originator.{SaQuestionModel, SurveyModel}
 import persistence.models.Tables._
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.H2Profile.api._

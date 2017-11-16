@@ -50,6 +50,7 @@ if (document.getElementById('question-list') != null) {
             var sid = Number(document.getElementById("surveyId").textContent)
             var param = {req: {
             surveyId: sid,
+            questionType: "sa",
             question: this.question,
             choice1: this.choice1,
             choice2: this.choice2,

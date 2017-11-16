@@ -2,7 +2,7 @@ package domain
 
 import javax.inject.{Inject, Singleton}
 
-import models.SaQuestionModel
+import models.originator.SaQuestionModel
 import persistence.models.Tables._
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.H2Profile.api._
@@ -87,6 +87,7 @@ class SaQuestionService @Inject()(dc: DatabaseConfigProvider) {
         SaQuestionModel(
           id = Some(r.id),
           surveyId = Some(r.surveyId),
+          questionType = Some("sa"),
           question = r.question,
           choice1 = r.choice1,
           choice2 = r.choice2,
@@ -108,59 +109,5 @@ class SaQuestionService @Inject()(dc: DatabaseConfigProvider) {
     dbConfig.db.run(
       SaQuestion.filter(_.id === id).delete
     )
-  }
-
-  /**
-    * 質問の回答結果をDBに保存する
-    * @param questionId 登録する回答に紐づく質問id
-    * @param choice 選択した選択肢の番号
-    * @return
-    */
-  def createAnswer(questionId: Long, choice: Int): Future[Long] = {
-
-    val date = new java.util.Date()
-    val nowTime =
-      new java.sql.Timestamp(new org.joda.time.DateTime(date).getMillis)
-
-    val dbConfig = dc.get[JdbcProfile]
-    dbConfig.db.run(
-      SaAnswer returning SaAnswer.map(_.id) += SaAnswerRow(
-        id = 0,
-        questionId = questionId,
-        choice1 = if (choice == 1) Some(1) else None,
-        choice2 = if (choice == 2) Some(1) else None,
-        choice3 = if (choice == 3) Some(1) else None,
-        choice4 = if (choice == 4) Some(1) else None,
-        choice5 = if (choice == 5) Some(1) else None,
-        createAt = nowTime,
-        updateAt = nowTime
-      )
-    )
-  }
-
-  /**
-    * 指定されたquestionIdの回答結果の合計を返す
-    * @param questionId 質問id
-    * @return
-    */
-  def countAnswer(questionId: Long): Future[(Int, Int, Int, Int, Int)] = {
-
-    val dbConfig = dc.get[JdbcProfile]
-
-    val query = SaAnswer
-      .filter(_.questionId === questionId)
-      .groupBy(_.questionId)
-      .map {
-        case (_, grp) =>
-          (grp.map(x => x.choice1).sum.getOrElse(0),
-           grp.map(x => x.choice2).sum.getOrElse(0),
-           grp.map(x => x.choice3).sum.getOrElse(0),
-           grp.map(x => x.choice4).sum.getOrElse(0),
-           grp.map(x => x.choice5).sum.getOrElse(0))
-      }
-      .result
-
-    val res: Future[Seq[(Int, Int, Int, Int, Int)]] = dbConfig.db.run(query)
-    res.map(_.head)
   }
 }

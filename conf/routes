@@ -16,18 +16,18 @@ GET     /originator/question/:surveyId    controllers.originator.HtmlController.
 GET     /user                       controllers.user.HtmlController.index
 
 # API
-POST    /api/sa                     controllers.api.SaQuestionController.postQuestion
-PUT     /api/sa                     controllers.api.SaQuestionController.putQuestion
-GET     /api/sa                     controllers.api.SaQuestionController.getAllQuestion
-GET     /api/sa/:id                 controllers.api.SaQuestionController.getQuestion(id: Long)
-DELETE  /api/sa/:id                 controllers.api.SaQuestionController.deleteQuestion(id: Long)
-POST    /api/sa/answer              controllers.api.SaQuestionController.postAnswer
-GET     /api/sa/answer/:id          controllers.api.SaQuestionController.getAnswer(id: Long)
+POST    /api/sa                     controllers.api.QuestionController.postQuestion
+PUT     /api/sa                     controllers.api.QuestionController.putQuestion
+GET     /api/sa                     controllers.api.QuestionController.getAllQuestion
+GET     /api/sa/:id                 controllers.api.QuestionController.getQuestion(id: Long)
+DELETE  /api/sa/:id                 controllers.api.QuestionController.deleteQuestion(id: Long)
+POST    /api/sa/answer              controllers.api.QuestionController.postAnswer
+GET     /api/sa/answer/:id          controllers.api.QuestionController.getAnswer(id: Long)
 POST    /api/survey                 controllers.api.SurveyController.postSurvey
 GET     /api/survey                 controllers.api.SurveyController.getAllSurvey
 
-GET     /api/question/sid/:sid      controllers.api.SaQuestionController.getQuestionBySurveyId(sid: Long)
-POST    /api/question               controllers.api.SaQuestionController.postQuestion
+GET     /api/question/sid/:sid      controllers.api.QuestionController.getQuestionBySurveyId(sid: Long)
+POST    /api/question               controllers.api.QuestionController.postQuestion
 
 # Admin
 GET     /admin                      controllers.admin.AdminController.index
