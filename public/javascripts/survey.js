@@ -17,15 +17,15 @@ var saList = new Vue({
   },
   methods: {
     pullQuestionIdList: function () {
-      axios.get("/sa")
+      axios.get("/api/sa")
       .then(response => {this.questionIdList = response.data.res})
     },
     pullQuestion: function () {
-      axios.get("/sa/" + this.selectQuestionId)
+      axios.get("/api/sa/" + this.selectQuestionId)
       .then(response => {this.questionData = response.data.res[0]})
     },
     pullAnswer: function () {
-      axios.get("/sa/answer/" + this.selectQuestionId)
+      axios.get("/api/sa/answer/" + this.selectQuestionId)
       .then(response => {this.answerData = response.data})
     },
     changeQuestion: function () {
@@ -36,7 +36,7 @@ var saList = new Vue({
     pushQuestion: function () {
         var param = {req: {question: this.question, choice1: this.choice1, choice2: this.choice2, choice3: this.choice3, choice4: this.choice4, choice5: this.choice5}}
         axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
-        axios.post("/sa", param)
+        axios.post("/api/sa", param)
         this.pullQuestionIdList()
     },
     pushAnswer: function (qid, radioName) {
@@ -49,15 +49,15 @@ var saList = new Vue({
         }
         var param = {req: {questionId: qid, choice: Number(checked)}}
         axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
-        axios.post("/sa/answer", param)
+        axios.post("/api/sa/answer", param)
         this.pullAnswer()
     },
     resetData: function () {
         axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
-        axios.post("/reset")
+        axios.post("/api/reset")
         this.questionIdList = []
         this.selectQuestionId = 0
-        this.questionData = {},
+        this.questionData = {}
         this.answerData = {}
     }
   }

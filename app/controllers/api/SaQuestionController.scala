@@ -1,4 +1,4 @@
-package controllers
+package controllers.api
 
 import javax.inject._
 
@@ -24,12 +24,31 @@ class SaQuestionController @Inject()(cc: ControllerComponents)(qs: SaQuestionSer
       .map(y => Ok(Json.toJson(y)))
   }
 
+  def putQuestion() = Action(parse.json).async { request =>
+    val placeResult = request.body.validate[SaQuestionRequest]
+    val updateCount: Future[Int] = placeResult.map(j => qs.updateQuestion(j.req)).getOrElse(Future(0))
+    updateCount
+      .map(x => SaQuestionResult(SaQuestionModel(id = Some(x))))
+      .map(y => Ok(Json.toJson(y)))
+  }
+
   def getAllQuestion() = Action.async {
-    qs.readQuestion(None).map(x => SaQuestionListResult(x)).map(y => Ok(Json.toJson(y)))
+    qs.readQuestion(None, None).map(x => SaQuestionListResult(x)).map(y => Ok(Json.toJson(y)))
+  }
+
+  def getQuestionBySurveyId(surveyId: Long) = Action.async {
+    qs.readQuestion(None, Some(surveyId)).map(x => SaQuestionListResult(x)).map(y => Ok(Json.toJson(y)))
   }
 
   def getQuestion(id: Long) = Action.async {
-    qs.readQuestion(Some(id)).map(x => SaQuestionListResult(x)).map(y => Ok(Json.toJson(y)))
+    qs.readQuestion(Some(id), None).map(x => SaQuestionListResult(x)).map(y => Ok(Json.toJson(y)))
+  }
+
+  def deleteQuestion(id: Long) = Action(parse.json).async {
+    val deleteCount: Future[Int] = qs.deleteQuestion(id)
+    deleteCount
+      .map(x => SaQuestionResult(SaQuestionModel(id = Some(x))))
+      .map(y => Ok(Json.toJson(y)))
   }
 
   def postAnswer() = Action(parse.json).async { request =>

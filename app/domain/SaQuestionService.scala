@@ -29,6 +29,7 @@ class SaQuestionService @Inject()(dc: DatabaseConfigProvider) {
     dbConfig.db.run(
       SaQuestion returning SaQuestion.map(_.id) += SaQuestionRow(
         id = 0,
+        surveyId = q.surveyId.getOrElse(0),
         question = q.question,
         choice1 = q.choice1,
         choice2 = q.choice2,
@@ -42,28 +43,50 @@ class SaQuestionService @Inject()(dc: DatabaseConfigProvider) {
   }
 
   /**
-    * 質問をDBから読み込む
-    * id指定の場合は対象の質問1件を返し、指定がない場合は全件取得する
-    * @param id 検索対象の質問のid
+    * 質問の内容を更新する
+    * @param q 更新内容
     * @return
     */
-  def readQuestion(id: Option[Long]): Future[Seq[SaQuestionModel]] = {
+  def updateQuestion(q: SaQuestionModel): Future[Int] = {
+
+    val date = new java.util.Date()
+    val nowTime =
+      new java.sql.Timestamp(new org.joda.time.DateTime(date).getMillis)
+
+    val dbConfig = dc.get[JdbcProfile]
+    dbConfig.db.run(
+      SaQuestion.filter(_.id === q.id.get)
+        .map(r => (r.question, r.choice1, r.choice2, r.choice3, r.choice4, r.choice5, r.updateAt))
+        .update((q.question, q.choice1, q.choice2, q.choice3, q.choice4, q.choice5, nowTime))
+      )
+  }
+
+  /**
+    * 質問をDBから読み込む
+    * パラメーターで指定されたアンケートのリストを返す
+    * @param id 検索対象の質問のid
+    * @param surveyId アンケートのid
+    * @return
+    */
+  def readQuestion(id: Option[Long], surveyId: Option[Long]): Future[Seq[SaQuestionModel]] = {
 
     val dbConfig = dc.get[JdbcProfile]
 
     val query = if (id.isDefined) {
       SaQuestion.filter(_.id === id.get).result
+    } else if (surveyId.isDefined) {
+      SaQuestion.filter(_.surveyId === surveyId.get).result
     } else {
       SaQuestion.result
     }
 
-    val res: Future[Seq[SaQuestionRow]] =
-      dbConfig.db.run(query)
+    val res: Future[Seq[SaQuestionRow]] = dbConfig.db.run(query)
 
     res.map(
       _.map(r =>
         SaQuestionModel(
           id = Some(r.id),
+          surveyId = Some(r.surveyId),
           question = r.question,
           choice1 = r.choice1,
           choice2 = r.choice2,
@@ -73,6 +96,18 @@ class SaQuestionService @Inject()(dc: DatabaseConfigProvider) {
           createAt = Some(r.createAt.toString),
           updateAt = Some(r.updateAt.toString)
       )))
+  }
+
+  /**
+    * 質問を削除する
+    * @param id 削除対象のid
+    * @return
+    */
+  def deleteQuestion(id: Long): Future[Int] = {
+    val dbConfig = dc.get[JdbcProfile]
+    dbConfig.db.run(
+      SaQuestion.filter(_.id === id).delete
+    )
   }
 
   /**
@@ -116,13 +151,12 @@ class SaQuestionService @Inject()(dc: DatabaseConfigProvider) {
       .filter(_.questionId === questionId)
       .groupBy(_.questionId)
       .map {
-        case (_, grp) => {
+        case (_, grp) =>
           (grp.map(x => x.choice1).sum.getOrElse(0),
            grp.map(x => x.choice2).sum.getOrElse(0),
            grp.map(x => x.choice3).sum.getOrElse(0),
            grp.map(x => x.choice4).sum.getOrElse(0),
            grp.map(x => x.choice5).sum.getOrElse(0))
-        }
       }
       .result
 

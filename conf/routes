@@ -5,14 +5,34 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
-POST    /sa                         controllers.SaQuestionController.postQuestion
-GET     /sa                         controllers.SaQuestionController.getAllQuestion
-GET     /sa/:id                     controllers.SaQuestionController.getQuestion(id: Long)
-POST    /sa/answer                  controllers.SaQuestionController.postAnswer
-GET     /sa/answer/:id              controllers.SaQuestionController.getAnswer(id: Long)
 
-GET     /reset                      controllers.AdminController.reset
-POST    /reset                      controllers.AdminController.reset
+
+
+# HTML Originator
+GET     /originator/survey                controllers.originator.HtmlController.surveyList
+GET     /originator/question/:surveyId    controllers.originator.HtmlController.questionList(surveyId: Long)
+
+# HTML User
+GET     /user                       controllers.user.HtmlController.index
+
+# API
+POST    /api/sa                     controllers.api.SaQuestionController.postQuestion
+PUT     /api/sa                     controllers.api.SaQuestionController.putQuestion
+GET     /api/sa                     controllers.api.SaQuestionController.getAllQuestion
+GET     /api/sa/:id                 controllers.api.SaQuestionController.getQuestion(id: Long)
+DELETE  /api/sa/:id                 controllers.api.SaQuestionController.deleteQuestion(id: Long)
+POST    /api/sa/answer              controllers.api.SaQuestionController.postAnswer
+GET     /api/sa/answer/:id          controllers.api.SaQuestionController.getAnswer(id: Long)
+POST    /api/survey                 controllers.api.SurveyController.postSurvey
+GET     /api/survey                 controllers.api.SurveyController.getAllSurvey
+
+GET     /api/question/sid/:sid      controllers.api.SaQuestionController.getQuestionBySurveyId(sid: Long)
+POST    /api/question               controllers.api.SaQuestionController.postQuestion
+
+# Admin
+GET     /admin                      controllers.admin.AdminController.index
+GET     /admin/api/reset            controllers.admin.AdminController.reset
+POST    /admin/api/reset            controllers.admin.AdminController.reset
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

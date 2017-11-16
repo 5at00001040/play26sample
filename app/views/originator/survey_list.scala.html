@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <style type="text/css">
+<!--
+
+-->
+    </style>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div id="survey-list">
+
+  <h2>アンケート一覧</h2>
+  <div>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>タイトル</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="sl in surveyList">
+        <td>{{ sl.id }}</td>
+        <td>{{ sl.title }}</td>
+        <td><a v-bind:href="'/originator/question/' + sl.id">アンケートを編集する</a></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div>
+    <form>
+      <div>
+        <div>アンケート名</div>
+        <div>
+          <input type="text" v-model="surveyTitle" placeholder="アンケート名を入力してください">
+        </div>
+      </div>
+      <input type="button" v-on:click="postSurvey" value="アンケート作成" />
+    </form>
+  </div>
+
+
+</div>
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/assets/javascripts/originator/survey.js"></script>
+</body>
+</html>
