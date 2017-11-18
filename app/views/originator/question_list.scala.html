@@ -17,7 +17,8 @@
   <h2>質問リスト</h2>
   <div id="surveyId">@surveyId</div>
 
-  <div>
+  <div v-for="ql in questionList">
+    <template v-if="ql.questionType == 'sa'">
     <table>
       <thead>
       <tr>
@@ -31,7 +32,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="ql in questionList">
+      <tr>
         <td>{{ ql.id }}</td>
         <td>{{ ql.question }}</td>
         <td>{{ ql.choice1 }}</td>
@@ -42,22 +43,38 @@
       </tr>
       </tbody>
     </table>
+    </template>
+    <template v-if="ql.questionType == 'eo'">
+      <div>
+        <p>{{ ql.id }}</p>
+        <p>{{ ql.question }}</p>
+      </div>
+    </template>
   </div>
 
   <div>
     <form>
       <div>
-        <div>追加</div>
+        <div>選択式</div>
         <div>
-          <input type="text" v-model="question" placeholder="質問を入力してください">
-          <input type="text" v-model="choice1" placeholder="選択肢1を入力してください">
-          <input type="text" v-model="choice2" placeholder="選択肢2を入力してください">
-          <input type="text" v-model="choice3" placeholder="選択肢3を入力してください">
-          <input type="text" v-model="choice4" placeholder="選択肢4を入力してください">
-          <input type="text" v-model="choice5" placeholder="選択肢5を入力してください">
+          <input type="text" v-model="saQuestion" placeholder="質問を入力してください">
+          <input type="text" v-model="saChoice1" placeholder="選択肢1を入力してください">
+          <input type="text" v-model="saChoice2" placeholder="選択肢2を入力してください">
+          <input type="text" v-model="saChoice3" placeholder="選択肢3を入力してください">
+          <input type="text" v-model="saChoice4" placeholder="選択肢4を入力してください">
+          <input type="text" v-model="saChoice5" placeholder="選択肢5を入力してください">
         </div>
       </div>
-      <input type="button" v-on:click="postQuestion" value="質問追加" />
+      <input type="button" v-on:click="postSaQuestion" value="質問追加" />
+    </form>
+    <form>
+      <div>
+        <div>はい、いいえ式</div>
+        <div>
+          <input type="text" v-model="eoQuestion" placeholder="質問を入力してください">
+        </div>
+      </div>
+      <input type="button" v-on:click="postEoQuestion" value="質問追加" />
     </form>
   </div>
 
