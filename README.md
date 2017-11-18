@@ -18,13 +18,18 @@ https://blog.playframework.com/play-2-6-6-released/
 
 ### Activator開発終了
 activator開発終了になったのでsbtで起動する  
-sbtのコンソールを立ち上げなくても  
-sbt "run 9000"  
-でポート指定で起動できる
+sbtのコンソールを立ち上げなくても以下のコマンドでポート指定できる  
+
+```
+sbt "run 9000"
+```
+
+
 
 ### slickCodeGen関連
 
 slick-codegen3.2.0からSourceCodeGenerator初期化のパラメーターが変わった  
+slickDriverからprofileに変わっているので気をつける
 
 ```
 SourceCodeGenerator.main(
@@ -34,24 +39,37 @@ SourceCodeGenerator.main(
 
 http://slick.lightbend.com/doc/3.2.0/code-generation.html  
 
-slickDriverからprofileに変わっているので気をつける
 
+slick-codegenとは直接関係ないがsbtではrunMainで実行するclassを指定できる
 
-slick-codegenとは直接関係ないがsbtではrunMainで実行するclassを指定できる  
+```
 runMain infrastructures.SlickCodegen
+```
 
 
 ### セキュリティ関連
 CDN使う場合はapplication.confにcontentSecurityPolicyを設定する必要がある  
 今回のように静的ページからPOSTする場合CSRFのトークンが使えないので、csrfのチェックを行わない条件にするヘッダーの指定をする  
+
+```
 play.filters.csrf.header.bypassHeaders
+```
 
-play.crypto.secret="適当な値に変える"
+本番用として起動する場合は秘密鍵の設定を行う必要があるため、環境変数から読むようにする  
+設定し忘れが強いので、changemeも変えておいたほうがよい  
+AWSのパラメータストアを使うと便利  
 
-### 起動停止
+```
+play.crypto.secret="changeme"
+play.crypto.secret=${?APPLICATION_SECRET}
+```
 
+
+### 起動/停止
+
+```
 sbt "start 9000"
 sbt "start 9000 -DapplyEvolutions.default=true"
 
 kill $(cat target/universal/stage/RUNNING_PID)
-
+```
