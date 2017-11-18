@@ -3,7 +3,7 @@ package controllers.api
 import javax.inject._
 
 import domain.SurveyService
-import models._
+import models.originator.{SurveyListResponse, SurveyModel, SurveyRequest, SurveyResponse}
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.Json
 import play.api.mvc._

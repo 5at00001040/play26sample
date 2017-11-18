@@ -1,4 +1,4 @@
-package models
+package models.originator
 
 import play.api.libs.json.{Json, OFormat}
 
