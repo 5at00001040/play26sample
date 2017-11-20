@@ -30,12 +30,13 @@ if (document.getElementById('question-list') != null) {
       el: '#question-list',
       data: {
         questionList: [],
-        question: "",
-        choice1: "",
-        choice2: "",
-        choice3: "",
-        choice4: "",
-        choice5: ""
+        saQuestion: "",
+        saChoice1: "",
+        saChoice2: "",
+        saChoice3: "",
+        saChoice4: "",
+        saChoice5: "",
+        eoQuestion: ""
       },
       mounted: function () {
         this.getQuestionList()
@@ -46,17 +47,28 @@ if (document.getElementById('question-list') != null) {
             axios.get("/api/question/sid/" + sid)
             .then(response => {this.questionList = response.data.res})
         },
-        postQuestion: function () {
+        postSaQuestion: function () {
             var sid = Number(document.getElementById("surveyId").textContent)
             var param = {req: {
             surveyId: sid,
             questionType: "sa",
-            question: this.question,
-            choice1: this.choice1,
-            choice2: this.choice2,
-            choice3: this.choice3,
-            choice4: this.choice4,
-            choice5: this.choice5
+            question: this.saQuestion,
+            choice1: this.saChoice1,
+            choice2: this.saChoice2,
+            choice3: this.saChoice3,
+            choice4: this.saChoice4,
+            choice5: this.saChoice5
+            }}
+            axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
+            axios.post("/api/question", param)
+            this.getQuestionList()
+        },
+        postEoQuestion: function () {
+            var sid = Number(document.getElementById("surveyId").textContent)
+            var param = {req: {
+            surveyId: sid,
+            questionType: "eo",
+            question: this.eoQuestion
             }}
             axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
             axios.post("/api/question", param)

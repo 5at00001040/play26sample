@@ -2,7 +2,7 @@ package domain
 
 import javax.inject.{Inject, Singleton}
 
-import models.originator.{QuestionModel, SaQuestionModel}
+import models.originator.{EoQuestionModel, QuestionModel, SaQuestionModel}
 import persistence.models.Tables._
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.H2Profile.api._
@@ -12,7 +12,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class QuestionService @Inject()(dc: DatabaseConfigProvider)(saq: SaQuestionService) {
+class QuestionService @Inject()(dc: DatabaseConfigProvider)(saq: SaQuestionService)(eoq: EoQuestionService) {
 
   /**
     * 質問の情報をDBに登録する
@@ -22,6 +22,7 @@ class QuestionService @Inject()(dc: DatabaseConfigProvider)(saq: SaQuestionServi
   def createQuestion(q: QuestionModel): Future[Long] = {
     q match {
       case sa: SaQuestionModel => saq.createQuestion(sa)
+      case eo: EoQuestionModel => eoq.createQuestion(eo)
       case _ => ???
     }
   }
@@ -34,6 +35,7 @@ class QuestionService @Inject()(dc: DatabaseConfigProvider)(saq: SaQuestionServi
   def updateQuestion(q: QuestionModel): Future[Int] = {
     q match {
       case sa: SaQuestionModel => saq.updateQuestion(sa)
+      case eo: EoQuestionModel => eoq.updateQuestion(eo)
       case _ => ???
     }
   }
@@ -46,7 +48,9 @@ class QuestionService @Inject()(dc: DatabaseConfigProvider)(saq: SaQuestionServi
     * @return
     */
   def readQuestion(id: Option[Long], surveyId: Option[Long]): Future[Seq[QuestionModel]] = {
-    saq.readQuestion(id, surveyId)
+    val sa = saq.readQuestion(id, surveyId)
+    val eo = eoq.readQuestion(id, surveyId)
+    (sa zip eo).map(q => q._1 ++ q._2)
   }
 
   /**
@@ -55,7 +59,9 @@ class QuestionService @Inject()(dc: DatabaseConfigProvider)(saq: SaQuestionServi
     * @return
     */
   def deleteQuestion(id: Long): Future[Int] = {
-    saq.deleteQuestion(id)
+    (saq.deleteQuestion(id) zip
+      eoq.deleteQuestion(id))
+      .map(d => d._1 + d._2)
   }
 
 

@@ -14,9 +14,79 @@ trait Tables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = KeyValue.schema ++ PlayEvolutions.schema ++ SaAnswer.schema ++ SaQuestion.schema ++ Survey.schema
+  lazy val schema: profile.SchemaDescription = Array(EoAnswer.schema, EoQuestion.schema, KeyValue.schema, PlayEvolutions.schema, SaAnswer.schema, SaQuestion.schema, Survey.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
+
+  /** Entity class storing rows of table EoAnswer
+   *  @param id Database column ID SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param questionId Database column QUESTION_ID SqlType(BIGINT)
+   *  @param choice Database column CHOICE SqlType(INTEGER)
+   *  @param createAt Database column CREATE_AT SqlType(TIMESTAMP)
+   *  @param updateAt Database column UPDATE_AT SqlType(TIMESTAMP) */
+  case class EoAnswerRow(id: Long, questionId: Long, choice: Option[Int], createAt: java.sql.Timestamp, updateAt: java.sql.Timestamp)
+  /** GetResult implicit for fetching EoAnswerRow objects using plain SQL queries */
+  implicit def GetResultEoAnswerRow(implicit e0: GR[Long], e1: GR[Option[Int]], e2: GR[java.sql.Timestamp]): GR[EoAnswerRow] = GR{
+    prs => import prs._
+    EoAnswerRow.tupled((<<[Long], <<[Long], <<?[Int], <<[java.sql.Timestamp], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table EO_ANSWER. Objects of this class serve as prototypes for rows in queries. */
+  class EoAnswer(_tableTag: Tag) extends profile.api.Table[EoAnswerRow](_tableTag, "EO_ANSWER") {
+    def * = (id, questionId, choice, createAt, updateAt) <> (EoAnswerRow.tupled, EoAnswerRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(id), Rep.Some(questionId), choice, Rep.Some(createAt), Rep.Some(updateAt)).shaped.<>({r=>import r._; _1.map(_=> EoAnswerRow.tupled((_1.get, _2.get, _3, _4.get, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column ID SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("ID", O.AutoInc, O.PrimaryKey)
+    /** Database column QUESTION_ID SqlType(BIGINT) */
+    val questionId: Rep[Long] = column[Long]("QUESTION_ID")
+    /** Database column CHOICE SqlType(INTEGER) */
+    val choice: Rep[Option[Int]] = column[Option[Int]]("CHOICE")
+    /** Database column CREATE_AT SqlType(TIMESTAMP) */
+    val createAt: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("CREATE_AT")
+    /** Database column UPDATE_AT SqlType(TIMESTAMP) */
+    val updateAt: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("UPDATE_AT")
+
+    /** Foreign key referencing EoQuestion (database name CONSTRAINT_19) */
+    lazy val eoQuestionFk = foreignKey("CONSTRAINT_19", questionId, EoQuestion)(r => r.id, onUpdate=ForeignKeyAction.Restrict, onDelete=ForeignKeyAction.Restrict)
+  }
+  /** Collection-like TableQuery object for table EoAnswer */
+  lazy val EoAnswer = new TableQuery(tag => new EoAnswer(tag))
+
+  /** Entity class storing rows of table EoQuestion
+   *  @param id Database column ID SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param surveyId Database column SURVEY_ID SqlType(BIGINT)
+   *  @param question Database column QUESTION SqlType(VARCHAR)
+   *  @param createAt Database column CREATE_AT SqlType(TIMESTAMP)
+   *  @param updateAt Database column UPDATE_AT SqlType(TIMESTAMP) */
+  case class EoQuestionRow(id: Long, surveyId: Long, question: Option[String], createAt: java.sql.Timestamp, updateAt: java.sql.Timestamp)
+  /** GetResult implicit for fetching EoQuestionRow objects using plain SQL queries */
+  implicit def GetResultEoQuestionRow(implicit e0: GR[Long], e1: GR[Option[String]], e2: GR[java.sql.Timestamp]): GR[EoQuestionRow] = GR{
+    prs => import prs._
+    EoQuestionRow.tupled((<<[Long], <<[Long], <<?[String], <<[java.sql.Timestamp], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table EO_QUESTION. Objects of this class serve as prototypes for rows in queries. */
+  class EoQuestion(_tableTag: Tag) extends profile.api.Table[EoQuestionRow](_tableTag, "EO_QUESTION") {
+    def * = (id, surveyId, question, createAt, updateAt) <> (EoQuestionRow.tupled, EoQuestionRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(id), Rep.Some(surveyId), question, Rep.Some(createAt), Rep.Some(updateAt)).shaped.<>({r=>import r._; _1.map(_=> EoQuestionRow.tupled((_1.get, _2.get, _3, _4.get, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column ID SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("ID", O.AutoInc, O.PrimaryKey)
+    /** Database column SURVEY_ID SqlType(BIGINT) */
+    val surveyId: Rep[Long] = column[Long]("SURVEY_ID")
+    /** Database column QUESTION SqlType(VARCHAR) */
+    val question: Rep[Option[String]] = column[Option[String]]("QUESTION")
+    /** Database column CREATE_AT SqlType(TIMESTAMP) */
+    val createAt: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("CREATE_AT")
+    /** Database column UPDATE_AT SqlType(TIMESTAMP) */
+    val updateAt: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("UPDATE_AT")
+
+    /** Foreign key referencing Survey (database name CONSTRAINT_72D) */
+    lazy val surveyFk = foreignKey("CONSTRAINT_72D", surveyId, Survey)(r => r.id, onUpdate=ForeignKeyAction.Restrict, onDelete=ForeignKeyAction.Restrict)
+  }
+  /** Collection-like TableQuery object for table EoQuestion */
+  lazy val EoQuestion = new TableQuery(tag => new EoQuestion(tag))
 
   /** Entity class storing rows of table KeyValue
    *  @param key Database column KEY SqlType(VARCHAR), PrimaryKey

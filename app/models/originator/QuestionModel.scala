@@ -5,11 +5,13 @@ import play.api.libs.json._
 trait QuestionModel
 object QuestionModel {
   implicit val questionModelWrite: Writes[QuestionModel] = Writes {
-    case sa: SaQuestionModel => SaQuestionModel.saQuestionFormat.writes(sa)
+    case sa: SaQuestionModel => SaQuestionModel.saQuestionModelFormat.writes(sa)
+    case eo: EoQuestionModel => EoQuestionModel.eoQuestionModelFormat.writes(eo)
   }
   implicit val questionModelRead: Reads[QuestionModel] = Reads { json =>
     (json \ "questionType").asOpt[String] match {
-      case Some("sa") => SaQuestionModel.saQuestionFormat.reads(json)
+      case Some("sa") => SaQuestionModel.saQuestionModelFormat.reads(json)
+      case Some("eo") => EoQuestionModel.eoQuestionModelFormat.reads(json)
       case x => JsError(s"json read error: $x")
     }
   }
@@ -29,5 +31,3 @@ case class QuestionResult(res: QuestionModel)
 object QuestionResult {
   implicit val questionResultFormat: Format[QuestionResult] = Json.format[QuestionResult]
 }
-
-
