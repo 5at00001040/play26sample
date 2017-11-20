@@ -14,5 +14,5 @@ case class SaQuestionModel(id: Option[Long] = None,
                            createAt: Option[String] = None,
                            updateAt: Option[String] = None) extends QuestionModel
 object SaQuestionModel {
-  implicit val saQuestionFormat: Format[SaQuestionModel] = Json.format[SaQuestionModel]
+  implicit val saQuestionModelFormat: Format[SaQuestionModel] = Json.format[SaQuestionModel]
 }

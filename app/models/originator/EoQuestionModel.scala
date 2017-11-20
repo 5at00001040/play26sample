@@ -9,5 +9,5 @@ case class EoQuestionModel(id: Option[Long] = None,
                            createAt: Option[String] = None,
                            updateAt: Option[String] = None) extends QuestionModel
 object EoQuestionModel {
-  implicit val eoQuestionFormat: Format[EoQuestionModel] = Json.format[EoQuestionModel]
+  implicit val eoQuestionModelFormat: Format[EoQuestionModel] = Json.format[EoQuestionModel]
 }
