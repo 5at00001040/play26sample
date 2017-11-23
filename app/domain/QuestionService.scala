@@ -64,37 +64,6 @@ class QuestionService @Inject()(dc: DatabaseConfigProvider)(saq: SaQuestionServi
       .map(d => d._1 + d._2)
   }
 
-
-  // TODO 以下別クラスに切り出す
-
-  /**
-    * 質問の回答結果をDBに保存する
-    * @param questionId 登録する回答に紐づく質問id
-    * @param choice 選択した選択肢の番号
-    * @return
-    */
-  def createAnswer(questionId: Long, choice: Int): Future[Long] = {
-
-    val date = new java.util.Date()
-    val nowTime =
-      new java.sql.Timestamp(new org.joda.time.DateTime(date).getMillis)
-
-    val dbConfig = dc.get[JdbcProfile]
-    dbConfig.db.run(
-      SaAnswer returning SaAnswer.map(_.id) += SaAnswerRow(
-        id = 0,
-        questionId = questionId,
-        choice1 = if (choice == 1) Some(1) else None,
-        choice2 = if (choice == 2) Some(1) else None,
-        choice3 = if (choice == 3) Some(1) else None,
-        choice4 = if (choice == 4) Some(1) else None,
-        choice5 = if (choice == 5) Some(1) else None,
-        createAt = nowTime,
-        updateAt = nowTime
-      )
-    )
-  }
-
   /**
     * 指定されたquestionIdの回答結果の合計を返す
     * @param questionId 質問id

@@ -13,19 +13,19 @@ GET     /originator/survey                controllers.originator.HtmlController.
 GET     /originator/question/:surveyId    controllers.originator.HtmlController.questionList(surveyId: Long)
 
 # HTML User
-GET     /user                       controllers.user.HtmlController.index
+GET     /user/question/:surveyId          controllers.user.HtmlController.index(surveyId: Long)
 
 # API
 POST    /api/survey                 controllers.api.SurveyController.postSurvey
 GET     /api/survey                 controllers.api.SurveyController.getAllSurvey
 GET     /api/question/sid/:sid      controllers.api.QuestionController.getQuestionBySurveyId(sid: Long)
 POST    /api/question               controllers.api.QuestionController.postQuestion
+POST    /api/answer                 controllers.api.AnswerController.postAnswer
 
 POST    /api/sa                     controllers.api.QuestionController.postQuestion
 PUT     /api/sa                     controllers.api.QuestionController.putQuestion
 GET     /api/sa/:id                 controllers.api.QuestionController.getQuestion(id: Long)
 DELETE  /api/sa/:id                 controllers.api.QuestionController.deleteQuestion(id: Long)
-POST    /api/sa/answer              controllers.api.QuestionController.postAnswer
 GET     /api/sa/answer/:id          controllers.api.QuestionController.getAnswer(id: Long)
 
 # Admin

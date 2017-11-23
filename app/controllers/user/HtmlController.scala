@@ -7,10 +7,8 @@ import play.api.mvc._
 @Singleton
 class HtmlController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
-  def index() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.user())
+  def index(surveyId: Long) = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.user(surveyId))
   }
-
-
 
 }
