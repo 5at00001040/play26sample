@@ -2,7 +2,8 @@ package domain
 
 import javax.inject.{Inject, Singleton}
 
-import models.originator.{SaQuestionModel, SurveyModel}
+import models.originator.{QuestionModel, SaQuestionModel, SurveyModel}
+import models.user.{AnswerModel, AnswerSummaryModel}
 import persistence.models.Tables._
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.H2Profile.api._
@@ -12,7 +13,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class SurveyService @Inject()(dc: DatabaseConfigProvider) {
+class SurveyService @Inject()(dc: DatabaseConfigProvider)(qs: QuestionService)(as: AnswerService) {
 
   /**
     * アンケートをDBに登録する
@@ -63,5 +64,16 @@ class SurveyService @Inject()(dc: DatabaseConfigProvider) {
           createAt = Some(r.createAt.toString),
           updateAt = Some(r.updateAt.toString)
         )))
+  }
+
+  def readSurveyResult(id: Long): Future[Seq[(QuestionModel, AnswerSummaryModel)]] = {
+
+    val ql: Future[Seq[QuestionModel]] = qs.readQuestion(None, Some(id))
+    val al: Future[Seq[Future[AnswerSummaryModel]]] = ql.map(x => {
+      val baz: Seq[Future[AnswerSummaryModel]] = x.map(y => as.countAnswer(y))
+      baz
+    })
+
+    ???
   }
 }

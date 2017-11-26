@@ -2,7 +2,8 @@ package domain
 
 import javax.inject.{Inject, Singleton}
 
-import models.user.{AnswerModel, EoAnswerModel, SaAnswerModel}
+import models.originator.{EoQuestionModel, QuestionModel, SaQuestionModel}
+import models.user._
 import persistence.models.Tables._
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.H2Profile.api._
@@ -63,6 +64,54 @@ class AnswerService @Inject()(dc: DatabaseConfigProvider) {
         updateAt = nowTime
       )
     )
+  }
+
+  def countAnswer(qm: QuestionModel): Future[AnswerSummaryModel] = {
+    qm match {
+      case sa: SaQuestionModel => countSaAnswer(sa.id.get)
+      case eo: EoQuestionModel => countEoAnswer(eo.id.get)
+      case _ => ???
+    }
+  }
+
+  def countSaAnswer(questionId: Long): Future[SaAnswerSummaryModel] = {
+
+    val dbConfig = dc.get[JdbcProfile]
+
+    val query = SaAnswer
+      .filter(_.questionId === questionId)
+      .groupBy(_.questionId)
+      .map {
+        case (_, grp) =>
+          (grp.map(x => x.choice1).sum.getOrElse(0),
+            grp.map(x => x.choice2).sum.getOrElse(0),
+            grp.map(x => x.choice3).sum.getOrElse(0),
+            grp.map(x => x.choice4).sum.getOrElse(0),
+            grp.map(x => x.choice5).sum.getOrElse(0))
+      }
+      .result
+
+    val res: Future[Seq[(Int, Int, Int, Int, Int)]] = dbConfig.db.run(query)
+    res.map(x => SaAnswerSummaryModel(x.head._1, x.head._2, x.head._3, x.head._4, x.head._5))
+  }
+
+  def countEoAnswer(questionId: Long): Future[EoAnswerSummaryModel] = {
+
+    val dbConfig = dc.get[JdbcProfile]
+
+    val query = EoAnswer
+      .filter(_.questionId === questionId)
+      .map(_.choice)
+      .result
+    val res: Future[Seq[Option[Int]]] = dbConfig.db.run(query)
+
+    val count = res.map(x => x.flatMap(y => y.map {
+      case 1 => (1, 0)
+      case 0 => (0, 1)
+      case _ => (0, 0)
+    })).map(x => x.reduce((a, b) => (a._1 + b._1, a._2 + b._2)))
+
+    count.map(x => EoAnswerSummaryModel(x._1, x._2))
   }
 
 }

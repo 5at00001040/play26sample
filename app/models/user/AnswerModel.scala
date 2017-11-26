@@ -22,8 +22,3 @@ object AnswerListRequest {
   implicit val answerListRequestFormat: Format[AnswerListRequest] = Json.format[AnswerListRequest]
 }
 
-//case class AnswerListRequest(req: AnswerModel)
-//object AnswerListRequest {
-//  implicit def answerListRequestFormat: Format[AnswerListRequest] =
-//    Json.format[AnswerListRequest]
-//}

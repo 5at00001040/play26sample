@@ -3,7 +3,8 @@ package controllers.api
 import javax.inject._
 
 import domain.SurveyService
-import models.originator.{SurveyListResponse, SurveyModel, SurveyRequest, SurveyResponse}
+import models.originator._
+import models.user.AnswerSummaryModel
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -31,6 +32,10 @@ class SurveyController @Inject()(cc: ControllerComponents)(ss: SurveyService)(
 
   def getAllSurvey() = Action.async {
     ss.readSurvey(None).map(x => SurveyListResponse(x)).map(y => Ok(Json.toJson(y)))
+  }
+
+  def getSurveyResult(id: Long) = Action.async {
+    ss.readSurveyResult(id).map(x => SurveyResultResponse(x)).map(y => Ok(Json.toJson(y)))
   }
 
 }

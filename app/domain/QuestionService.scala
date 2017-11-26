@@ -63,30 +63,4 @@ class QuestionService @Inject()(dc: DatabaseConfigProvider)(saq: SaQuestionServi
       eoq.deleteQuestion(id))
       .map(d => d._1 + d._2)
   }
-
-  /**
-    * 指定されたquestionIdの回答結果の合計を返す
-    * @param questionId 質問id
-    * @return
-    */
-  def countAnswer(questionId: Long): Future[(Int, Int, Int, Int, Int)] = {
-
-    val dbConfig = dc.get[JdbcProfile]
-
-    val query = SaAnswer
-      .filter(_.questionId === questionId)
-      .groupBy(_.questionId)
-      .map {
-        case (_, grp) =>
-          (grp.map(x => x.choice1).sum.getOrElse(0),
-           grp.map(x => x.choice2).sum.getOrElse(0),
-           grp.map(x => x.choice3).sum.getOrElse(0),
-           grp.map(x => x.choice4).sum.getOrElse(0),
-           grp.map(x => x.choice5).sum.getOrElse(0))
-      }
-      .result
-
-    val res: Future[Seq[(Int, Int, Int, Int, Int)]] = dbConfig.db.run(query)
-    res.map(_.head)
-  }
 }
