@@ -13,7 +13,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class SurveyService @Inject()(dc: DatabaseConfigProvider)(qs: QuestionService)(as: AnswerService) {
+class SurveyService @Inject()(dc: DatabaseConfigProvider)(qs: QuestionService)(
+    as: AnswerService) {
 
   /**
     * アンケートをDBに登録する
@@ -57,23 +58,26 @@ class SurveyService @Inject()(dc: DatabaseConfigProvider)(qs: QuestionService)(a
       dbConfig.db.run(query)
 
     res.map(
-      _.map(r =>
-        SurveyModel(
-          id = Some(r.id),
-          title = r.surveyTitle,
-          createAt = Some(r.createAt.toString),
-          updateAt = Some(r.updateAt.toString)
+      _.map(
+        r =>
+          SurveyModel(
+            id = Some(r.id),
+            title = r.surveyTitle,
+            createAt = Some(r.createAt.toString),
+            updateAt = Some(r.updateAt.toString)
         )))
   }
 
-  def readSurveyResult(id: Long): Future[Seq[(QuestionModel, AnswerSummaryModel)]] = {
+  def readSurveyResult(
+      id: Long): Future[Seq[(QuestionModel, AnswerSummaryModel)]] = {
 
     val ql: Future[Seq[QuestionModel]] = qs.readQuestion(None, Some(id))
-    val al: Future[Seq[Future[AnswerSummaryModel]]] = ql.map(x => {
-      val baz: Seq[Future[AnswerSummaryModel]] = x.map(y => as.countAnswer(y))
-      baz
-    })
+//    val al: Future[Seq[Future[AnswerSummaryModel]]] = ql.map(_.map(x => as.countAnswer(x)))
+//    val fal: Future[Seq[AnswerSummaryModel]] = al.map(Future.sequence(_)).flatten
+    val al: Future[Seq[AnswerSummaryModel]] =
+      ql.map(_.map(x => as.countAnswer(x))).map(Future.sequence(_)).flatten
 
-    ???
+    (ql zip al).map(x => x._1 zip x._2)
+
   }
 }

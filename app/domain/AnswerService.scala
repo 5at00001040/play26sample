@@ -20,7 +20,7 @@ class AnswerService @Inject()(dc: DatabaseConfigProvider) {
     val res = al.map {
       case sa: SaAnswerModel => createSaAnswer(sa)
       case eo: EoAnswerModel => createEoAnswer(eo)
-      case _ => ???
+      case _                 => ???
     }
 
     res.reduce((a, b) => (a zip b).map(x => x._1 + x._2))
@@ -70,7 +70,7 @@ class AnswerService @Inject()(dc: DatabaseConfigProvider) {
     qm match {
       case sa: SaQuestionModel => countSaAnswer(sa.id.get)
       case eo: EoQuestionModel => countEoAnswer(eo.id.get)
-      case _ => ???
+      case _                   => ???
     }
   }
 
@@ -84,15 +84,17 @@ class AnswerService @Inject()(dc: DatabaseConfigProvider) {
       .map {
         case (_, grp) =>
           (grp.map(x => x.choice1).sum.getOrElse(0),
-            grp.map(x => x.choice2).sum.getOrElse(0),
-            grp.map(x => x.choice3).sum.getOrElse(0),
-            grp.map(x => x.choice4).sum.getOrElse(0),
-            grp.map(x => x.choice5).sum.getOrElse(0))
+           grp.map(x => x.choice2).sum.getOrElse(0),
+           grp.map(x => x.choice3).sum.getOrElse(0),
+           grp.map(x => x.choice4).sum.getOrElse(0),
+           grp.map(x => x.choice5).sum.getOrElse(0))
       }
       .result
 
     val res: Future[Seq[(Int, Int, Int, Int, Int)]] = dbConfig.db.run(query)
-    res.map(x => SaAnswerSummaryModel(x.head._1, x.head._2, x.head._3, x.head._4, x.head._5))
+    res
+      .map(x => x.headOption.getOrElse((0, 0, 0, 0, 0)))
+      .map(x => SaAnswerSummaryModel(x._1, x._2, x._3, x._4, x._5))
   }
 
   def countEoAnswer(questionId: Long): Future[EoAnswerSummaryModel] = {
@@ -105,11 +107,15 @@ class AnswerService @Inject()(dc: DatabaseConfigProvider) {
       .result
     val res: Future[Seq[Option[Int]]] = dbConfig.db.run(query)
 
-    val count = res.map(x => x.flatMap(y => y.map {
-      case 1 => (1, 0)
-      case 0 => (0, 1)
-      case _ => (0, 0)
-    })).map(x => x.reduce((a, b) => (a._1 + b._1, a._2 + b._2)))
+    val count = res
+      .map(x =>
+        x.flatMap(y =>
+          y.map {
+            case 1 => (1, 0)
+            case 0 => (0, 1)
+            case _ => (0, 0)
+        }))
+      .map(x => x.fold((0, 0))((a, b) => (a._1 + b._1, a._2 + b._2)))
 
     count.map(x => EoAnswerSummaryModel(x._1, x._2))
   }

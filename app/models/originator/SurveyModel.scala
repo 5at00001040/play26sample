@@ -28,7 +28,7 @@ object SurveyModel {
 
 case class SurveyResultResponse(res: Seq[(QuestionModel, AnswerSummaryModel)])
 object SurveyResultResponse {
-  implicit val surveyResultResponseFormat: Format[SurveyRequest] = Json.format[SurveyRequest]
+  implicit val surveyResultResponseFormat: Format[SurveyResultResponse] = Json.format[SurveyResultResponse]
 }
 
 
