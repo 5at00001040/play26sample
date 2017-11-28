@@ -1,11 +1,40 @@
+@(surveyId: Long)
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
+    <meta charset="utf-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
-<p>検討中</p>
+<div id="question-list">
 
+    <h2>アンケート実施</h2>
+    <div id="surveyId" style="display: none">@surveyId</div>
+
+    <form>
+        <div v-for="ql in questionList">
+
+            <template v-if="ql.questionType == 'sa'">
+                <h4>{{ ql.question }}</h4>
+                <label><input type="radio" v-bind:value="ql.id + '-sa:1'" v-bind:name="'qr-' + ql.id" class="a-radio"> <span class="label-body">{{ ql.choice1 }}</span></label>
+                <label><input type="radio" v-bind:value="ql.id + '-sa:2'" v-bind:name="'qr-' + ql.id" class="a-radio"> <span class="label-body">{{ ql.choice2 }}</span></label>
+                <label><input type="radio" v-bind:value="ql.id + '-sa:3'" v-bind:name="'qr-' + ql.id" class="a-radio"> <span class="label-body">{{ ql.choice3 }}</span></label>
+                <label><input type="radio" v-bind:value="ql.id + '-sa:4'" v-bind:name="'qr-' + ql.id" class="a-radio"> <span class="label-body">{{ ql.choice4 }}</span></label>
+                <label><input type="radio" v-bind:value="ql.id + '-sa:5'" v-bind:name="'qr-' + ql.id" class="a-radio"> <span class="label-body">{{ ql.choice4 }}</span></label>
+            </template>
+            <template v-if="ql.questionType == 'eo'">
+                <h4>{{ ql.question }}</h4>
+                <label><input type="radio" v-bind:value="ql.id + '-eo:1'" v-bind:name="'qr-' + ql.id" class="a-radio"> <span class="label-body">はい</span></label>
+                <label><input type="radio" v-bind:value="ql.id + '-eo:0'" v-bind:name="'qr-' + ql.id" class="a-radio"> <span class="label-body">いいえ</span></label>
+            </template>
+        </div>
+        <input type="button" v-on:click="postAnswer()" value="回答">
+    </form>
+</div>
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/assets/javascripts/user/survey.js"></script>
 </body>
 </html>

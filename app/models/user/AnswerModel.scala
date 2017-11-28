@@ -17,8 +17,8 @@ object AnswerModel {
   }
 }
 
-case class AnswerListRequest(req: AnswerModel)
+case class AnswerListRequest(req: Seq[AnswerModel])
 object AnswerListRequest {
-  implicit def answerListRequestFormat: Format[AnswerListRequest] =
-    Json.format[AnswerListRequest]
+  implicit val answerListRequestFormat: Format[AnswerListRequest] = Json.format[AnswerListRequest]
 }
+
