@@ -18,18 +18,28 @@ if (document.getElementById('question-list') != null) {
         },
         postAnswer: function () {
             var sid = Number(document.getElementById("surveyId").textContent)
-            var param = {req: {
-            surveyId: sid,
-            questionType: "sa",
-            question: this.saQuestion,
-            choice1: this.saChoice1,
-            choice2: this.saChoice2,
-            choice3: this.saChoice3,
-            choice4: this.saChoice4,
-            choice5: this.saChoice5
-            }}
+
+            var radioArray = Array.from(document.querySelectorAll('.a-radio'))
+            var selectArray = radioArray.filter(e => e.checked).map(e => e.value)
+            var answerArray = selectArray.map(e => {
+                var a = e.split(":");
+                var b = a[0].split("-");
+                return { qid: Number(b[0]), qType: b[1], value: Number(a[1]) };
+            })
+
+            var paramArray = answerArray.map(e => {
+                var p = null
+                if (e.qType == "sa") {
+                    p = {questionId: e.qid, questionType: e.qType, choice: e.value}
+                } else if (e.qType == "eo") {
+                    p = {questionId: e.qid, questionType: e.qType, choice: e.value}
+                }
+                return p
+            })
+
+            var param = {req: paramArray}
             axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
-            axios.post("/api/question", param)
+            axios.post("/api/answer", param)
             this.getQuestionList()
         },
       }
