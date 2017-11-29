@@ -77,3 +77,22 @@ if (document.getElementById('question-list') != null) {
       }
     });
 }
+
+if (document.getElementById('survey-result') != null) {
+    var surveyList = new Vue({
+      el: '#survey-result',
+      data: {
+        surveyResult: []
+      },
+      mounted: function () {
+        this.getSurveyResult()
+      },
+      methods: {
+        getSurveyResult: function () {
+            var sid = document.getElementById("surveyId").textContent
+            axios.get("/api/survey/result/" + sid)
+            .then(response => {this.surveyResult = response.data.res})
+        }
+      }
+    });
+}

@@ -12,10 +12,11 @@
 </head>
 <body>
 
+<div id="surveyId" style="display: none">@surveyId</div>
+
 <div id="question-list">
 
   <h2>質問リスト</h2>
-  <div id="surveyId">@surveyId</div>
 
   <div v-for="ql in questionList">
     <template v-if="ql.questionType == 'sa'">

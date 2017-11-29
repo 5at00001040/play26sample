@@ -1,0 +1,35 @@
+@(surveyId: Long)
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div id="surveyId" style="display: none">@surveyId</div>
+
+<div id="survey-result">
+
+  <div v-for="qa in surveyResult">
+    <div>{{ qa.q.questionType + ' : ' + qa.q.question }}</div>
+    <template v-if="qa.q.questionType == 'sa'">
+        <div>choice1: {{ qa.a.count1 }}</div>
+        <div>choice2: {{ qa.a.count2 }}</div>
+        <div>choice3: {{ qa.a.count3 }}</div>
+        <div>choice4: {{ qa.a.count4 }}</div>
+        <div>choice5: {{ qa.a.count5 }}</div>
+    </template>
+    <template v-if="qa.q.questionType == 'eo'">
+        <div>yes: {{ qa.a.count1 }}</div>
+        <div>no:  {{ qa.a.count2 }}</div>
+    </template>
+  </div>
+
+</div>
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/assets/javascripts/originator/survey.js"></script>
+</body>
+</html>

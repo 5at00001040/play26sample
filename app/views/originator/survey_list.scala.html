@@ -20,7 +20,7 @@
       <tr>
         <th>ID</th>
         <th>タイトル</th>
-        <th>操作</th>
+        <th colspan="2">操作</th>
       </tr>
       </thead>
       <tbody>
@@ -28,6 +28,7 @@
         <td>{{ sl.id }}</td>
         <td>{{ sl.title }}</td>
         <td><a v-bind:href="'/originator/question/' + sl.id">アンケートを編集する</a></td>
+        <td><a v-bind:href="'/originator/survey-result/' + sl.id">アンケート結果を確認する</a></td>
       </tr>
       </tbody>
     </table>

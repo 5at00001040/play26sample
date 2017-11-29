@@ -1,5 +1,27 @@
-@()
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" rel="stylesheet" type="text/css">
+</head>
+<body>
 
-@main("Welcome to Play") {
-  <h1>Welcome to Play!</h1>
-}
+<div>
+    <a href="/originator/survey">アンケートを登録する</a>
+</div>
+
+<div>
+    <a href="/user/question">アンケートに答える(一覧ページ未作成)</a>
+</div>
+
+<div>
+    <a href="/admin">管理用機能</a>
+</div>
+
+
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/assets/javascripts/originator/survey.js"></script>
+</body>
+</html>
