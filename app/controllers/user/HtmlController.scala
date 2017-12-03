@@ -11,4 +11,9 @@ class HtmlController @Inject()(cc: ControllerComponents) extends AbstractControl
     Ok(views.html.user(surveyId))
   }
 
+  def thanks(surveyId: Long) = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.thanks(surveyId))
+
+  }
+
 }

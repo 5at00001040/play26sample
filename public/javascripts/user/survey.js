@@ -5,12 +5,19 @@ if (document.getElementById('question-list') != null) {
     var questionList = new Vue({
       el: '#question-list',
       data: {
+        surveyTitle: "",
         questionList: []
       },
       mounted: function () {
+        this.getSurveyTitle()
         this.getQuestionList()
       },
       methods: {
+        getSurveyTitle: function () {
+            var sid = document.getElementById("surveyId").textContent
+            axios.get("/api/survey/" + sid)
+            .then(response => {this.surveyTitle = response.data.res.title})
+        },
         getQuestionList: function () {
             var sid = document.getElementById("surveyId").textContent
             axios.get("/api/question/sid/" + sid)
@@ -40,7 +47,7 @@ if (document.getElementById('question-list') != null) {
             var param = {req: paramArray}
             axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
             axios.post("/api/answer", param)
-            this.getQuestionList()
+            location.href = '/user/thanks/' + sid
         },
       }
     });

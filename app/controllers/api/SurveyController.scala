@@ -30,6 +30,10 @@ class SurveyController @Inject()(cc: ControllerComponents)(ss: SurveyService)(
       .map(y => Ok(Json.toJson(y)))
   }
 
+  def getSurvey(id: Long) = Action.async {
+    ss.readSurvey(Some(id)).map(x => SurveyResponse(x.head)).map(y => Ok(Json.toJson(y)))
+  }
+
   def getAllSurvey() = Action.async {
     ss.readSurvey(None).map(x => SurveyListResponse(x)).map(y => Ok(Json.toJson(y)))
   }

@@ -3,11 +3,6 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <style type="text/css">
-<!--
-
--->
-    </style>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -16,15 +11,15 @@
 
 <div id="question-list">
 
-  <h2>質問リスト</h2>
+  <h3>{{ surveyTitle }} アンケート詳細</h3>
 
-  <div v-for="ql in questionList">
+  <h4>質問一覧</h4>
+  <div v-for="(ql, index) in questionList">
     <template v-if="ql.questionType == 'sa'">
-    <table>
+      <h5>質問{{ index + 1 }}: {{ ql.question }}</h5>
+      <table>
       <thead>
       <tr>
-        <th>ID</th>
-        <th>質問</th>
         <th>選択肢1</th>
         <th>選択肢2</th>
         <th>選択肢3</th>
@@ -34,8 +29,6 @@
       </thead>
       <tbody>
       <tr>
-        <td>{{ ql.id }}</td>
-        <td>{{ ql.question }}</td>
         <td>{{ ql.choice1 }}</td>
         <td>{{ ql.choice2 }}</td>
         <td>{{ ql.choice3 }}</td>
@@ -43,42 +36,65 @@
         <td>{{ ql.choice5 }}</td>
       </tr>
       </tbody>
-    </table>
+      </table>
     </template>
     <template v-if="ql.questionType == 'eo'">
-      <div>
-        <p>{{ ql.id }}</p>
-        <p>{{ ql.question }}</p>
-      </div>
+
+      <h5>質問{{ index + 1 }}: {{ ql.question }}</h5>
+      <table>
+        <thead>
+        <tr>
+          <th>選択肢1</th>
+          <th>選択肢2</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>はい</td>
+          <td>いいえ</td>
+        </tr>
+        </tbody>
+      </table>
+
+
     </template>
   </div>
 
+  <h4>質問追加</h4>
   <div>
     <form>
       <div>
-        <div>選択式</div>
+        <div>単一選択</div>
         <div>
-          <input type="text" v-model="saQuestion" placeholder="質問を入力してください">
-          <input type="text" v-model="saChoice1" placeholder="選択肢1を入力してください">
-          <input type="text" v-model="saChoice2" placeholder="選択肢2を入力してください">
-          <input type="text" v-model="saChoice3" placeholder="選択肢3を入力してください">
-          <input type="text" v-model="saChoice4" placeholder="選択肢4を入力してください">
-          <input type="text" v-model="saChoice5" placeholder="選択肢5を入力してください">
+          <div>
+            <input type="text" v-model="saQuestion" placeholder="質問内容 例) ラーメンの麺の硬さの好みを教えてください。" style="width: 35%;">
+          </div>
+          <div>
+            <input type="text" v-model="saChoice1" placeholder="選択肢1 例) バリカタ" style="width: 12%;" >
+            <input type="text" v-model="saChoice2" placeholder="選択肢2 例) かため" style="width: 12%;" >
+            <input type="text" v-model="saChoice3" placeholder="選択肢3 例) ふつう" style="width: 12%;" >
+            <input type="text" v-model="saChoice4" placeholder="選択肢4 例) やわめ" style="width: 12%;" >
+            <input type="text" v-model="saChoice5" placeholder="選択肢5 例) バリやわ" style="width: 12%;" >
+          </div>
         </div>
       </div>
       <input type="button" v-on:click="postSaQuestion" value="質問追加" />
     </form>
     <form>
       <div>
-        <div>はい、いいえ式</div>
+        <div>はい、いいえ選択</div>
         <div>
-          <input type="text" v-model="eoQuestion" placeholder="質問を入力してください">
+          <input type="text" v-model="eoQuestion" placeholder="質問内容 例) ラーメンにニンニク入れますか？" style="width: 35%;" >
         </div>
       </div>
       <input type="button" v-on:click="postEoQuestion" value="質問追加" />
     </form>
   </div>
 
+  <div>
+    <a class="button" href="/user/question/@surveyId">アンケート実施ページへ</a>
+    <a class="button" href="/originator/survey">アンケート一覧に戻る</a>
+  </div>
 
 
 </div>

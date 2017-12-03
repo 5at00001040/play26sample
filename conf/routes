@@ -15,11 +15,13 @@ GET     /originator/survey-result/:surveyId  controllers.originator.HtmlControll
 
 # HTML User
 GET     /user/question/:surveyId             controllers.user.HtmlController.index(surveyId: Long)
+GET     /user/thanks/:surveyId               controllers.user.HtmlController.thanks(surveyId: Long)
 
 # API
 POST    /api/survey                 controllers.api.SurveyController.postSurvey
 GET     /api/survey                 controllers.api.SurveyController.getAllSurvey
-GET     /api/survey/result/:id      controllers.api.SurveyController.getSurveyResult(id: Long)
+GET     /api/survey/:id             controllers.api.SurveyController.getSurvey(id: Long)
+GET     /api/survey-result/:id      controllers.api.SurveyController.getSurveyResult(id: Long)
 GET     /api/question/sid/:sid      controllers.api.QuestionController.getQuestionBySurveyId(sid: Long)
 POST    /api/question               controllers.api.QuestionController.postQuestion
 POST    /api/answer                 controllers.api.AnswerController.postAnswer

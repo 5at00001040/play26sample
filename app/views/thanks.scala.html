@@ -1,0 +1,16 @@
+@(surveyId: Long)
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<div id="surveyId" style="display: none">@surveyId</div>
+<p style="font-size: 180%;">アンケートへのご協力ありがとうございました。</p>
+
+<a class="button" href="/originator/survey-result/@surveyId">結果確認</a>
+
+</body>
+</html>

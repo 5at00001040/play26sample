@@ -11,20 +11,51 @@
 
 <div id="survey-result">
 
-  <div v-for="qa in surveyResult">
-    <div>{{ qa.q.questionType + ' : ' + qa.q.question }}</div>
+    <h3>{{ surveyTitle }} アンケート結果</h3>
+
+  <div v-for="(qa, index) in surveyResult">
+    <h5>質問{{index + 1}}: {{ qa.q.question }}</h5>
     <template v-if="qa.q.questionType == 'sa'">
-        <div>choice1: {{ qa.a.count1 }}</div>
-        <div>choice2: {{ qa.a.count2 }}</div>
-        <div>choice3: {{ qa.a.count3 }}</div>
-        <div>choice4: {{ qa.a.count4 }}</div>
-        <div>choice5: {{ qa.a.count5 }}</div>
+        <table>
+            <thead>
+            <tr>
+                <th>{{ qa.q.choice1 }}</th>
+                <th>{{ qa.q.choice2 }}</th>
+                <th>{{ qa.q.choice3 }}</th>
+                <th>{{ qa.q.choice4 }}</th>
+                <th>{{ qa.q.choice5 }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ qa.a.count1 }}</td>
+                <td>{{ qa.a.count2 }}</td>
+                <td>{{ qa.a.count3 }}</td>
+                <td>{{ qa.a.count4 }}</td>
+                <td>{{ qa.a.count5 }}</td>
+            </tr>
+            </tbody>
+        </table>
     </template>
     <template v-if="qa.q.questionType == 'eo'">
-        <div>yes: {{ qa.a.count1 }}</div>
-        <div>no:  {{ qa.a.count2 }}</div>
+        <table>
+            <thead>
+            <tr>
+                <th>はい</th>
+                <th>いいえ</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ qa.a.count1 }}</td>
+                <td>{{ qa.a.count2 }}</td>
+            </tr>
+            </tbody>
+        </table>
     </template>
   </div>
+
+    <a class="button" href="/originator/survey">アンケート一覧に戻る</a>
 
 </div>
 
