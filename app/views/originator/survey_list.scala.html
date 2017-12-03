@@ -2,43 +2,41 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <style type="text/css">
-<!--
-
--->
-    </style>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
 <div id="survey-list">
 
-  <h2>アンケート一覧</h2>
+  <h3>アンケート一覧</h3>
   <div>
     <table>
       <thead>
       <tr>
         <th>ID</th>
         <th>タイトル</th>
-        <th>操作</th>
+        <th>実施ページ</th>
+        <th colspan="2"></th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="sl in surveyList">
         <td>{{ sl.id }}</td>
         <td>{{ sl.title }}</td>
-        <td><a v-bind:href="'/originator/question/' + sl.id">アンケートを編集する</a></td>
+        <td><a v-bind:href="'/user/question/' + sl.id">{{ '/user/question/' + sl.id }}</a></td>
+        <td><a class="button" v-bind:href="'/originator/question/' + sl.id">編集</a></td>
+        <td><a class="button" v-bind:href="'/originator/survey-result/' + sl.id">結果確認</a></td>
       </tr>
       </tbody>
     </table>
   </div>
 
+  <h3>新規アンケート作成</h3>
   <div>
     <form>
       <div>
-        <div>アンケート名</div>
         <div>
-          <input type="text" v-model="surveyTitle" placeholder="アンケート名を入力してください">
+          <input type="text" v-model="surveyTitle" placeholder="アンケートのタイトル 例) 外食についてのアンケート" style="width: 35%;">
         </div>
       </div>
       <input type="button" v-on:click="postSurvey" value="アンケート作成" />

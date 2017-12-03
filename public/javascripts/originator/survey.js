@@ -17,8 +17,10 @@ if (document.getElementById('survey-list') != null) {
         postSurvey: function () {
             var param = {req: {title: this.surveyTitle}}
                 axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
-                axios.post("/api/survey", param)
-            this.getSurveyList()
+            axios.post("/api/survey", param)
+            .then(response => {
+            location.href = '/originator/question/' + response.data.res.id
+            })
         }
       }
     });
@@ -29,6 +31,7 @@ if (document.getElementById('question-list') != null) {
     var questionList = new Vue({
       el: '#question-list',
       data: {
+        surveyTitle: "",
         questionList: [],
         saQuestion: "",
         saChoice1: "",
@@ -39,9 +42,15 @@ if (document.getElementById('question-list') != null) {
         eoQuestion: ""
       },
       mounted: function () {
+        this.getSurveyTitle()
         this.getQuestionList()
       },
       methods: {
+        getSurveyTitle: function () {
+            var sid = document.getElementById("surveyId").textContent
+            axios.get("/api/survey/" + sid)
+            .then(response => {this.surveyTitle = response.data.res.title})
+        },
         getQuestionList: function () {
             var sid = document.getElementById("surveyId").textContent
             axios.get("/api/question/sid/" + sid)
@@ -61,7 +70,7 @@ if (document.getElementById('question-list') != null) {
             }}
             axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
             axios.post("/api/question", param)
-            this.getQuestionList()
+            .then(response => this.getQuestionList())
         },
         postEoQuestion: function () {
             var sid = Number(document.getElementById("surveyId").textContent)
@@ -72,7 +81,33 @@ if (document.getElementById('question-list') != null) {
             }}
             axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
             axios.post("/api/question", param)
-            this.getQuestionList()
+            .then(response => this.getQuestionList())
+        }
+      }
+    });
+}
+
+if (document.getElementById('survey-result') != null) {
+    var surveyList = new Vue({
+      el: '#survey-result',
+      data: {
+        surveyTitle: "",
+        surveyResult: []
+      },
+      mounted: function () {
+        this.getSurveyTitle()
+        this.getSurveyResult()
+      },
+      methods: {
+        getSurveyTitle: function () {
+            var sid = document.getElementById("surveyId").textContent
+            axios.get("/api/survey/" + sid)
+            .then(response => {this.surveyTitle = response.data.res.title})
+        },
+        getSurveyResult: function () {
+            var sid = document.getElementById("surveyId").textContent
+            axios.get("/api/survey-result/" + sid)
+            .then(response => {this.surveyResult = response.data.res})
         }
       }
     });

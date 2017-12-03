@@ -2,7 +2,7 @@ package domain
 
 import javax.inject.{Inject, Singleton}
 
-import models.originator.{QuestionModel, SaQuestionModel, SurveyModel}
+import models.originator.{QAndAModel, QuestionModel, SaQuestionModel, SurveyModel}
 import models.user.{AnswerModel, AnswerSummaryModel}
 import persistence.models.Tables._
 import play.api.db.slick.DatabaseConfigProvider
@@ -69,7 +69,7 @@ class SurveyService @Inject()(dc: DatabaseConfigProvider)(qs: QuestionService)(
   }
 
   def readSurveyResult(
-      id: Long): Future[Seq[(QuestionModel, AnswerSummaryModel)]] = {
+      id: Long): Future[Seq[QAndAModel]] = {
 
     val ql: Future[Seq[QuestionModel]] = qs.readQuestion(None, Some(id))
 //    val al: Future[Seq[Future[AnswerSummaryModel]]] = ql.map(_.map(x => as.countAnswer(x)))
@@ -77,7 +77,7 @@ class SurveyService @Inject()(dc: DatabaseConfigProvider)(qs: QuestionService)(
     val al: Future[Seq[AnswerSummaryModel]] =
       ql.map(_.map(x => as.countAnswer(x))).map(Future.sequence(_)).flatten
 
-    (ql zip al).map(x => x._1 zip x._2)
+    (ql zip al).map(x => (x._1 zip x._2).map(x => QAndAModel(x._1, x._2)))
 
   }
 }

@@ -5,8 +5,6 @@ var saList = new Vue({
     resetData: function () {
             axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
             axios.post("/admin/api/reset")
-            this.surveyTitle = ""
-            this.surveyList = []
     }
   }
 });

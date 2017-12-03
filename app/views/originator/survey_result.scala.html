@@ -1,0 +1,66 @@
+@(surveyId: Long)
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div id="surveyId" style="display: none">@surveyId</div>
+
+<div id="survey-result">
+
+    <h3>{{ surveyTitle }} アンケート結果</h3>
+
+  <div v-for="(qa, index) in surveyResult">
+    <h5>質問{{index + 1}}: {{ qa.q.question }}</h5>
+    <template v-if="qa.q.questionType == 'sa'">
+        <table>
+            <thead>
+            <tr>
+                <th>{{ qa.q.choice1 }}</th>
+                <th>{{ qa.q.choice2 }}</th>
+                <th>{{ qa.q.choice3 }}</th>
+                <th>{{ qa.q.choice4 }}</th>
+                <th>{{ qa.q.choice5 }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ qa.a.count1 }}</td>
+                <td>{{ qa.a.count2 }}</td>
+                <td>{{ qa.a.count3 }}</td>
+                <td>{{ qa.a.count4 }}</td>
+                <td>{{ qa.a.count5 }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </template>
+    <template v-if="qa.q.questionType == 'eo'">
+        <table>
+            <thead>
+            <tr>
+                <th>はい</th>
+                <th>いいえ</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ qa.a.count1 }}</td>
+                <td>{{ qa.a.count2 }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </template>
+  </div>
+
+    <a class="button" href="/originator/survey">アンケート一覧に戻る</a>
+
+</div>
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/assets/javascripts/originator/survey.js"></script>
+</body>
+</html>
