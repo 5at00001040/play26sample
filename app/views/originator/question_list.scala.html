@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" rel="stylesheet" type="text/css">
+  <link href="/assets/stylesheets/survey.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
@@ -64,7 +65,7 @@
   <div>
     <form>
       <div>
-        <div>単一選択</div>
+        <h5>単一選択</h5>
         <div>
           <div>
             <input type="text" v-model="saQuestion" placeholder="質問内容 例) ラーメンの麺の硬さの好みを教えてください。" style="width: 35%;">
@@ -82,7 +83,7 @@
     </form>
     <form>
       <div>
-        <div>はい、いいえ選択</div>
+        <h5>はい、いいえ選択</h5>
         <div>
           <input type="text" v-model="eoQuestion" placeholder="質問内容 例) ラーメンにニンニク入れますか？" style="width: 35%;" >
         </div>
