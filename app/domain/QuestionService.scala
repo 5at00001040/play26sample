@@ -58,9 +58,11 @@ class QuestionService @Inject()(dc: DatabaseConfigProvider)(saq: SaQuestionServi
     * @param id 削除対象のid
     * @return
     */
-  def deleteQuestion(id: Long): Future[Int] = {
-    (saq.deleteQuestion(id) zip
-      eoq.deleteQuestion(id))
-      .map(d => d._1 + d._2)
+  def deleteQuestion(qtype: String, id: Long): Future[Int] = {
+    if (qtype == "sa") {
+      saq.deleteQuestion(id)
+    } else {
+      eoq.deleteQuestion(id)
+    }
   }
 }

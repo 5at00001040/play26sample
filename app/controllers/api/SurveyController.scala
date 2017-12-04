@@ -42,4 +42,8 @@ class SurveyController @Inject()(cc: ControllerComponents)(ss: SurveyService)(
     ss.readSurveyResult(id).map(x => SurveyResultResponse(x)).map(y => Ok(Json.toJson(y)))
   }
 
+  def deleteSurvey(id: Long) = Action.async {
+    ss.deleteSurvey(id).map(x => Ok(Json.toJson(x)))
+  }
+
 }

@@ -11,16 +11,22 @@ if (document.getElementById('survey-list') != null) {
       },
       methods: {
         getSurveyList: function () {
+            axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
             axios.get("/api/survey")
             .then(response => {this.surveyList = response.data.res})
         },
         postSurvey: function () {
             var param = {req: {title: this.surveyTitle}}
-                axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
+            axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
             axios.post("/api/survey", param)
             .then(response => {
             location.href = '/originator/question/' + response.data.res.id
             })
+        },
+        deleteSurvey: function (id) {
+            axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
+            axios.delete("/api/survey/" + id)
+            .then(response => {this.surveyList = response.data.res})
         }
       }
     });
@@ -81,6 +87,11 @@ if (document.getElementById('question-list') != null) {
             }}
             axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
             axios.post("/api/question", param)
+            .then(response => this.getQuestionList())
+        },
+        deleteQuestion: function (qtype, qid) {
+            axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
+            axios.delete("/api/question/" + qtype + "/" + qid)
             .then(response => this.getQuestionList())
         }
       }

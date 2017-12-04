@@ -17,7 +17,7 @@
         <th>ID</th>
         <th>タイトル</th>
         <th>実施ページ</th>
-        <th colspan="2"></th>
+        <th colspan="3"></th>
       </tr>
       </thead>
       <tbody>
@@ -26,6 +26,7 @@
         <td>{{ sl.title }}</td>
         <td><a v-bind:href="'/user/question/' + sl.id">{{ '/user/question/' + sl.id }}</a></td>
         <td><a class="button" v-bind:href="'/originator/question/' + sl.id">編集</a></td>
+        <td><input type="button" v-on:click="deleteSurvey(sl.id)" value="削除" /></td>
         <td><a class="button" v-bind:href="'/originator/survey-result/' + sl.id">結果確認</a></td>
       </tr>
       </tbody>
