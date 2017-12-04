@@ -1,0 +1,24 @@
+h3 {
+padding: 0.35em;
+background: #f6f3ff;
+border-left: solid 5px #374dbf;
+}
+
+h4 {
+padding: 0.2em;
+border-top: solid 2px #374dbf;
+border-bottom: solid 2px #374dbf;
+}
+
+h5 {
+padding: 0.2em;
+border-left: solid 5px #374dbf;
+}
+
+
+
+div.content-block {
+//background: #ebe5fd;
+}
+
+
