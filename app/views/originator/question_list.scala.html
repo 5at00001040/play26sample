@@ -38,6 +38,7 @@
       </tr>
       </tbody>
       </table>
+      <input type="button" v-on:click="deleteQuestion('sa', ql.id)" value="この質問を削除" />
     </template>
     <template v-if="ql.questionType == 'eo'">
 
@@ -56,7 +57,7 @@
         </tr>
         </tbody>
       </table>
-
+      <input type="button" v-on:click="deleteQuestion('eo', ql.id)" value="この質問を削除" />
 
     </template>
   </div>

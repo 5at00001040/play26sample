@@ -17,8 +17,7 @@ create table sa_question(
   choice4 varchar,
   choice5 varchar,
   create_at timestamp default current_timestamp not null,
-  update_at timestamp default current_timestamp not null,
-  foreign key (survey_id) references survey(id)
+  update_at timestamp default current_timestamp not null
 );
 
 create table sa_answer(
@@ -30,8 +29,7 @@ create table sa_answer(
   choice4 int,
   choice5 int,
   create_at timestamp default current_timestamp not null,
-  update_at timestamp default current_timestamp not null,
-  foreign key (question_id) references sa_question(id)
+  update_at timestamp default current_timestamp not null
 );
 
 create table eo_question(
@@ -39,8 +37,7 @@ create table eo_question(
   survey_id bigint not null,
   question varchar,
   create_at timestamp default current_timestamp not null,
-  update_at timestamp default current_timestamp not null,
-  foreign key (survey_id) references survey(id)
+  update_at timestamp default current_timestamp not null
 );
 
 create table eo_answer(
@@ -48,8 +45,7 @@ create table eo_answer(
   question_id bigint not null,
   choice int,
   create_at timestamp default current_timestamp not null,
-  update_at timestamp default current_timestamp not null,
-  foreign key (question_id) references eo_question(id)
+  update_at timestamp default current_timestamp not null
 );
 
 # --- !Downs

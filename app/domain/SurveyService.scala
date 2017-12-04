@@ -80,4 +80,11 @@ class SurveyService @Inject()(dc: DatabaseConfigProvider)(qs: QuestionService)(
     (ql zip al).map(x => (x._1 zip x._2).map(x => QAndAModel(x._1, x._2)))
 
   }
+
+  def deleteSurvey(id: Long): Future[Int] = {
+    val dbConfig = dc.get[JdbcProfile]
+    dbConfig.db.run(
+      Survey.filter(_.id === id).delete
+    )
+  }
 }
