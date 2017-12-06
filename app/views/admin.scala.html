@@ -6,19 +6,16 @@
 </head>
 <body>
 
-<h2>アンケートシステムデモ</h2>
+<div id="admin-app">
 
-<div>
-    <a class="button" href="/originator/survey">アンケート一覧</a>
+  <h2>管理機能</h2>
+  <div>
+    <input type="button" v-on:click="resetData" value="全データ削除" />
+  </div>
 </div>
-
-<div>
-    <a class="button" href="/admin">管理用機能</a>
-</div>
-
-
 
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/assets/javascripts/admin.js"></script>
 </body>
 </html>

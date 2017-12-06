@@ -1,0 +1,108 @@
+@(surveyId: Long)
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" rel="stylesheet" type="text/css">
+  <link href="/assets/stylesheets/survey.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<div id="surveyId" style="display: none">@surveyId</div>
+
+<div id="question-list">
+
+  <h3>{{ surveyTitle }} アンケート詳細</h3>
+
+  <h4>質問一覧</h4>
+  <div v-for="(ql, index) in questionList">
+    <template v-if="ql.questionType == 'sa'">
+      <h5>質問{{ index + 1 }}: {{ ql.question }}</h5>
+      <table>
+      <thead>
+      <tr>
+        <th>選択肢1</th>
+        <th>選択肢2</th>
+        <th>選択肢3</th>
+        <th>選択肢4</th>
+        <th>選択肢5</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>{{ ql.choice1 }}</td>
+        <td>{{ ql.choice2 }}</td>
+        <td>{{ ql.choice3 }}</td>
+        <td>{{ ql.choice4 }}</td>
+        <td>{{ ql.choice5 }}</td>
+      </tr>
+      </tbody>
+      </table>
+      <input type="button" v-on:click="deleteQuestion('sa', ql.id)" value="この質問を削除" />
+    </template>
+    <template v-if="ql.questionType == 'eo'">
+
+      <h5>質問{{ index + 1 }}: {{ ql.question }}</h5>
+      <table>
+        <thead>
+        <tr>
+          <th>選択肢1</th>
+          <th>選択肢2</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>はい</td>
+          <td>いいえ</td>
+        </tr>
+        </tbody>
+      </table>
+      <input type="button" v-on:click="deleteQuestion('eo', ql.id)" value="この質問を削除" />
+
+    </template>
+  </div>
+
+  <h4>質問追加</h4>
+  <div>
+    <form>
+      <div>
+        <h5>単一選択</h5>
+        <div>
+          <div>
+            <input type="text" v-model="saQuestion" placeholder="質問内容 例) ラーメンの麺の硬さの好みを教えてください。" style="width: 35%;">
+          </div>
+          <div>
+            <input type="text" v-model="saChoice1" placeholder="選択肢1 例) バリカタ" style="width: 12%;" >
+            <input type="text" v-model="saChoice2" placeholder="選択肢2 例) かため" style="width: 12%;" >
+            <input type="text" v-model="saChoice3" placeholder="選択肢3 例) ふつう" style="width: 12%;" >
+            <input type="text" v-model="saChoice4" placeholder="選択肢4 例) やわめ" style="width: 12%;" >
+            <input type="text" v-model="saChoice5" placeholder="選択肢5 例) バリやわ" style="width: 12%;" >
+          </div>
+        </div>
+      </div>
+      <input type="button" v-on:click="postSaQuestion" value="質問追加" />
+    </form>
+    <form>
+      <div>
+        <h5>はい、いいえ選択</h5>
+        <div>
+          <input type="text" v-model="eoQuestion" placeholder="質問内容 例) ラーメンにニンニク入れますか？" style="width: 35%;" >
+        </div>
+      </div>
+      <input type="button" v-on:click="postEoQuestion" value="質問追加" />
+    </form>
+  </div>
+
+  <div>
+    <a class="button" href="/user/question/@surveyId">アンケート実施ページへ</a>
+    <a class="button" href="/originator/survey">アンケート一覧に戻る</a>
+  </div>
+
+
+</div>
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/assets/javascripts/originator/survey.js"></script>
+</body>
+</html>
