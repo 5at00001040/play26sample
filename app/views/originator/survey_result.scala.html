@@ -20,20 +20,20 @@
         <table>
             <thead>
             <tr>
-                <th>{{ qa.q.choice1 }}</th>
-                <th>{{ qa.q.choice2 }}</th>
-                <th>{{ qa.q.choice3 }}</th>
-                <th>{{ qa.q.choice4 }}</th>
-                <th>{{ qa.q.choice5 }}</th>
+                <th v-if="qa.q.questionCount >= 1">{{ qa.q.choice1 }}</th>
+                <th v-if="qa.q.questionCount >= 2">{{ qa.q.choice2 }}</th>
+                <th v-if="qa.q.questionCount >= 3">{{ qa.q.choice3 }}</th>
+                <th v-if="qa.q.questionCount >= 4">{{ qa.q.choice4 }}</th>
+                <th v-if="qa.q.questionCount >= 5">{{ qa.q.choice5 }}</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td>{{ qa.a.count1 }}</td>
-                <td>{{ qa.a.count2 }}</td>
-                <td>{{ qa.a.count3 }}</td>
-                <td>{{ qa.a.count4 }}</td>
-                <td>{{ qa.a.count5 }}</td>
+                <td v-if="qa.q.questionCount >= 1">{{ qa.a.count1 }}</td>
+                <td v-if="qa.q.questionCount >= 2">{{ qa.a.count2 }}</td>
+                <td v-if="qa.q.questionCount >= 3">{{ qa.a.count3 }}</td>
+                <td v-if="qa.q.questionCount >= 4">{{ qa.a.count4 }}</td>
+                <td v-if="qa.q.questionCount >= 5">{{ qa.a.count5 }}</td>
             </tr>
             </tbody>
         </table>

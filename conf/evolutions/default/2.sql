@@ -2,7 +2,7 @@
 
 create table survey(
   id bigint not null auto_increment primary key,
-  survey_title varchar,
+  survey_title varchar not null,
   create_at timestamp default current_timestamp not null,
   update_at timestamp default current_timestamp not null
 );
@@ -10,7 +10,8 @@ create table survey(
 create table sa_question(
   id bigint not null auto_increment primary key,
   survey_id bigint not null,
-  question varchar,
+  question varchar not null,
+  question_count int not null,
   choice1 varchar,
   choice2 varchar,
   choice3 varchar,
@@ -35,7 +36,7 @@ create table sa_answer(
 create table eo_question(
   id bigint not null auto_increment primary key,
   survey_id bigint not null,
-  question varchar,
+  question varchar not null,
   create_at timestamp default current_timestamp not null,
   update_at timestamp default current_timestamp not null
 );

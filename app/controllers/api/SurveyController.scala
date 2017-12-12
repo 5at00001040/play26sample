@@ -4,7 +4,6 @@ import javax.inject._
 
 import domain.SurveyService
 import models.originator._
-import models.user.AnswerSummaryModel
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -21,13 +20,9 @@ class SurveyController @Inject()(cc: ControllerComponents)(ss: SurveyService)(
     val placeResult = request.body.validate[SurveyRequest]
 
     val createId: Future[Long] = placeResult
-      .map(j => j.req.title.map(t => ss.createSurvey(t)))
-      .getOrElse(None)
+      .map(j => ss.createSurvey(j.req.title))
       .getOrElse(Future(0))
-
-    createId
-      .map(x => SurveyResponse(SurveyModel(id = Some(x))))
-      .map(y => Ok(Json.toJson(y)))
+    createId.map(x => Ok(Json.toJson(Map("res" -> Map("id" -> x)))))
   }
 
   def getSurvey(id: Long) = Action.async {

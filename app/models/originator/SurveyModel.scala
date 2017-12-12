@@ -19,7 +19,7 @@ object SurveyListResponse {
 }
 
 case class SurveyModel(id: Option[Long],
-                       title: Option[String] = None,
+                       title: String,
                        createAt: Option[String] = None,
                        updateAt: Option[String] = None)
 object SurveyModel {
