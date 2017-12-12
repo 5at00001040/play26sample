@@ -21,8 +21,8 @@ class AnswerController @Inject()(cc: ControllerComponents)(as: AnswerService)(
     val placeResult = request.body.validate[AnswerListRequest]
     val createCount: Future[Int] = placeResult.map(j => as.createAnswer(j.req)).getOrElse(Future.successful(0))
     createCount
-      .map(x => QuestionResult(SaQuestionModel(id = Some(x))))
-      .map(y => Ok(Json.toJson(y)))
+//      .map(x => QuestionResult(SaQuestionModel(id = Some(x))))
+      .map(_ => Ok(Json.toJson(Map("res" -> "OK")	)))
   }
 
 }

@@ -4,8 +4,8 @@ import play.api.libs.json._
 
 case class EoQuestionModel(id: Option[Long] = None,
                            surveyId: Option[Long] = None,
-                           questionType: Option[String] = None,
-                           question: Option[String] = None,
+                           questionType: String = "eo",
+                           question: String,
                            createAt: Option[String] = None,
                            updateAt: Option[String] = None) extends QuestionModel
 object EoQuestionModel {
