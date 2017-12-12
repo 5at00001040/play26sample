@@ -4,7 +4,6 @@ import javax.inject._
 
 import domain.QuestionService
 import models.originator._
-import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.Json
 import play.api.mvc._
 
@@ -12,8 +11,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class QuestionController @Inject()(cc: ControllerComponents)(qs: QuestionService)(
-  dc: DatabaseConfigProvider)
+class QuestionController @Inject()(cc: ControllerComponents)(qs: QuestionService)
   extends AbstractController(cc) {
 
   def postQuestion() = Action(parse.json).async { request =>

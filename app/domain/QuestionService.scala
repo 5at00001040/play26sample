@@ -1,13 +1,8 @@
 package domain
 
 import javax.inject.{Inject, Singleton}
-
 import models.originator.{EoQuestionModel, QuestionModel, SaQuestionModel}
-import persistence.models.Tables._
 import play.api.db.slick.DatabaseConfigProvider
-import slick.jdbc.H2Profile.api._
-import slick.jdbc.JdbcProfile
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

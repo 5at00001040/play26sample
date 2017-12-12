@@ -4,7 +4,6 @@ import javax.inject._
 
 import domain.SurveyService
 import models.originator._
-import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.Json
 import play.api.mvc._
 
@@ -12,8 +11,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class SurveyController @Inject()(cc: ControllerComponents)(ss: SurveyService)(
-    dc: DatabaseConfigProvider)
+class SurveyController @Inject()(cc: ControllerComponents)(ss: SurveyService)
     extends AbstractController(cc) {
 
   def postSurvey() = Action(parse.json).async { request =>
