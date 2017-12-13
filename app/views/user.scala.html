@@ -19,11 +19,11 @@
 
             <template v-if="ql.questionType == 'sa'">
                 <h5>質問{{index+1}}: {{ ql.question }}</h5>
-                <label><input type="radio" v-bind:value="ql.id + '-sa:1'" v-bind:name="'qrsa-' + ql.id" class="a-radio"> <span class="label-body">{{ ql.choice1 }}</span></label>
-                <label><input type="radio" v-bind:value="ql.id + '-sa:2'" v-bind:name="'qrsa-' + ql.id" class="a-radio"> <span class="label-body">{{ ql.choice2 }}</span></label>
-                <label><input type="radio" v-bind:value="ql.id + '-sa:3'" v-bind:name="'qrsa-' + ql.id" class="a-radio"> <span class="label-body">{{ ql.choice3 }}</span></label>
-                <label><input type="radio" v-bind:value="ql.id + '-sa:4'" v-bind:name="'qrsa-' + ql.id" class="a-radio"> <span class="label-body">{{ ql.choice4 }}</span></label>
-                <label><input type="radio" v-bind:value="ql.id + '-sa:5'" v-bind:name="'qrsa-' + ql.id" class="a-radio"> <span class="label-body">{{ ql.choice5 }}</span></label>
+                <label v-if="ql.questionCount >= 1"><input type="radio" v-bind:value="ql.id + '-sa:1'" v-bind:name="'qrsa-' + ql.id" class="a-radio"> <span class="label-body">{{ ql.choice1 }}</span></label>
+                <label v-if="ql.questionCount >= 2"><input type="radio" v-bind:value="ql.id + '-sa:2'" v-bind:name="'qrsa-' + ql.id" class="a-radio"> <span class="label-body">{{ ql.choice2 }}</span></label>
+                <label v-if="ql.questionCount >= 3"><input type="radio" v-bind:value="ql.id + '-sa:3'" v-bind:name="'qrsa-' + ql.id" class="a-radio"> <span class="label-body">{{ ql.choice3 }}</span></label>
+                <label v-if="ql.questionCount >= 4"><input type="radio" v-bind:value="ql.id + '-sa:4'" v-bind:name="'qrsa-' + ql.id" class="a-radio"> <span class="label-body">{{ ql.choice4 }}</span></label>
+                <label v-if="ql.questionCount >= 5"><input type="radio" v-bind:value="ql.id + '-sa:5'" v-bind:name="'qrsa-' + ql.id" class="a-radio"> <span class="label-body">{{ ql.choice5 }}</span></label>
             </template>
             <template v-if="ql.questionType == 'eo'">
                 <h5>質問{{index+1}}: {{ ql.question }}</h5>

@@ -31,6 +31,7 @@ class SaQuestionService @Inject()(dc: DatabaseConfigProvider) {
         id = 0,
         surveyId = q.surveyId.getOrElse(0),
         question = q.question,
+        questionCount = q.questionCount,
         choice1 = q.choice1,
         choice2 = q.choice2,
         choice3 = q.choice3,
@@ -56,8 +57,8 @@ class SaQuestionService @Inject()(dc: DatabaseConfigProvider) {
     val dbConfig = dc.get[JdbcProfile]
     dbConfig.db.run(
       SaQuestion.filter(_.id === q.id.get)
-        .map(r => (r.question, r.choice1, r.choice2, r.choice3, r.choice4, r.choice5, r.updateAt))
-        .update((q.question, q.choice1, q.choice2, q.choice3, q.choice4, q.choice5, nowTime))
+        .map(r => (r.question, r.questionCount, r.choice1, r.choice2, r.choice3, r.choice4, r.choice5, r.updateAt))
+        .update((q.question, q.questionCount, q.choice1, q.choice2, q.choice3, q.choice4, q.choice5, nowTime))
       )
   }
 
@@ -87,8 +88,8 @@ class SaQuestionService @Inject()(dc: DatabaseConfigProvider) {
         SaQuestionModel(
           id = Some(r.id),
           surveyId = Some(r.surveyId),
-          questionType = Some("sa"),
           question = r.question,
+          questionCount = r.questionCount,
           choice1 = r.choice1,
           choice2 = r.choice2,
           choice3 = r.choice3,

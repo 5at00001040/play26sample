@@ -65,7 +65,6 @@ class EoQuestionService @Inject()(dc: DatabaseConfigProvider) {
         EoQuestionModel(
           id = Some(r.id),
           surveyId = Some(r.surveyId),
-          questionType = Some("eo"),
           question = r.question,
           createAt = Some(r.createAt.toString),
           updateAt = Some(r.updateAt.toString)

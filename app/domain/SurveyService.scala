@@ -2,8 +2,8 @@ package domain
 
 import javax.inject.{Inject, Singleton}
 
-import models.originator.{QAndAModel, QuestionModel, SaQuestionModel, SurveyModel}
-import models.user.{AnswerModel, AnswerSummaryModel}
+import models.originator.{QAndAModel, QuestionModel, SurveyModel}
+import models.user.AnswerSummaryModel
 import persistence.models.Tables._
 import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.H2Profile.api._
@@ -31,7 +31,7 @@ class SurveyService @Inject()(dc: DatabaseConfigProvider)(qs: QuestionService)(
     dbConfig.db.run(
       Survey returning Survey.map(_.id) += SurveyRow(
         id = 0,
-        surveyTitle = Some(title),
+        surveyTitle = title,
         createAt = nowTime,
         updateAt = nowTime
       )
@@ -72,8 +72,6 @@ class SurveyService @Inject()(dc: DatabaseConfigProvider)(qs: QuestionService)(
       id: Long): Future[Seq[QAndAModel]] = {
 
     val ql: Future[Seq[QuestionModel]] = qs.readQuestion(None, Some(id))
-//    val al: Future[Seq[Future[AnswerSummaryModel]]] = ql.map(_.map(x => as.countAnswer(x)))
-//    val fal: Future[Seq[AnswerSummaryModel]] = al.map(Future.sequence(_)).flatten
     val al: Future[Seq[AnswerSummaryModel]] =
       ql.map(_.map(x => as.countAnswer(x))).map(Future.sequence(_)).flatten
 
