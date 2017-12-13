@@ -56,8 +56,10 @@ play.filters.csrf.header.bypassHeaders
 ```
 
 本番用として起動する場合は秘密鍵の設定を行う必要があるため、環境変数から読むようにする  
-設定し忘れが強いので、changemeも変えておいたほうがよい  
+設定し忘れる可能性が高いので、changemeも変えておいたほうがよい  
 AWSのパラメータストアを使うと便利  
+
+または、後述のように起動時にパラメータとして渡す
 
 ```
 play.crypto.secret="changeme"
@@ -69,7 +71,15 @@ play.crypto.secret=${?APPLICATION_SECRET}
 
 ```
 sbt "start 9000"
-sbt "start 9000 -DapplyEvolutions.default=true"
+# 開発時は便利だが本番ではEvolutionsは使用しないほうがいいかもしれない
+sbt "start 9000 -DapplyEvolutions.default=true -Dplay.evolutions.db.default.autoApplyDowns=true -Dplay.http.secret.key=かえる"
 
 kill $(cat target/universal/stage/RUNNING_PID)
 ```
+
+### その他
+
+EC2のt2.microだどCPUの性能的にコンパイルに時間がかかったり失敗(?)するので、実行可能Jarに固めてデプロイしたほうが良いかもしれない
+
+
+
