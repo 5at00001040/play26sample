@@ -6,7 +6,12 @@
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
 
+GET         /signIn                          controllers.SignInController.view
+POST        /signIn                          controllers.SignInController.submit
 
+GET     /spike/debug-page           controllers.SpikeController.debugPage
+GET     /spike/debug-msg-page/:msg  controllers.SpikeController.debugMsgPage(msg: String)
+#GET     /silhouette-seed/index      controllers.SilhouetteSeedApplicationController.index
 
 # HTML Originator
 GET     /originator/survey                   controllers.originator.HtmlController.surveyList
