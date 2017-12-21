@@ -6,8 +6,12 @@
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
 
+GET         /signUp                          controllers.SignUpController.view
+POST        /signUp                          controllers.SignUpController.submit
 GET         /signIn                          controllers.SignInController.view
 POST        /signIn                          controllers.SignInController.submit
+GET         /account/email/:email            controllers.ActivateAccountController.send(email: String)
+GET         /account/activate/:token         controllers.ActivateAccountController.activate(token: java.util.UUID)
 
 GET     /spike/debug-page           controllers.SpikeController.debugPage
 GET     /spike/debug-msg-page/:msg  controllers.SpikeController.debugMsgPage(msg: String)
@@ -45,4 +49,7 @@ GET     /admin/api/reset            controllers.admin.AdminController.reset
 POST    /admin/api/reset            controllers.admin.AdminController.reset
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+#GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file               controllers.Assets.versioned(file)
+->          /webjars                         webjars.Routes
+

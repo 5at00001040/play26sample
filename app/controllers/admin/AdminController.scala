@@ -2,18 +2,20 @@ package controllers.admin
 
 import javax.inject._
 
+import com.mohiva.play.silhouette.api.Silhouette
 import persistence.models.Tables._
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.Json
 import play.api.mvc._
 import slick.jdbc.H2Profile.api._
 import slick.jdbc.JdbcProfile
+import utils.auth.DefaultEnv
 
 @Singleton
-class AdminController @Inject()(cc: ControllerComponents)(dc: DatabaseConfigProvider)
+class AdminController @Inject()(cc: ControllerComponents)(dc: DatabaseConfigProvider)(silhouette: Silhouette[DefaultEnv])
     extends AbstractController(cc) {
 
-  def index() = Action { implicit request: Request[AnyContent] =>
+  def index() = silhouette.SecuredAction { implicit request: Request[AnyContent] =>
     Ok(views.html.admin())
   }
 

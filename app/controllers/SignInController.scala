@@ -53,8 +53,9 @@ class SignInController @Inject()(
    *
    * @return The result to display.
    */
-  def view = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
-    Future.successful(Ok(views.html.signIn(SignInForm.form, socialProviderRegistry)))
+  def view() = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
+    val targetPath: String = request.flash.get("success").getOrElse("/")
+    Future.successful(Ok(views.html.signIn(SignInForm.form, socialProviderRegistry, targetPath)))
   }
 
   /**
@@ -64,12 +65,14 @@ class SignInController @Inject()(
    */
   def submit = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
     SignInForm.form.bindFromRequest.fold(
-      form => Future.successful(BadRequest(views.html.signIn(form, socialProviderRegistry))),
+      form => Future.successful(BadRequest(views.html.signIn(form, socialProviderRegistry, "/"))),
       data => {
         val credentials = Credentials(data.email, data.password)
         credentialsProvider.authenticate(credentials).flatMap { loginInfo =>
 //          val result = Redirect(routes.ApplicationController.index())
-          val result = Redirect(routes.SpikeController.debugMsgPage("Redirect(routes.ApplicationController.index())"))
+          // NOTE friendly forwarding
+//          val result = Redirect(routes.SpikeController.debugMsgPage("Redirect(routes.ApplicationController.index())"))
+          val result = Redirect(data.targetUrl)
           userService.retrieve(loginInfo).flatMap {
             case Some(user) if !user.activated =>
 //              Future.successful(Ok(views.html.activateAccount(data.email)))

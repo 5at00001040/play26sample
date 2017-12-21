@@ -25,7 +25,7 @@ class CustomSecuredErrorHandler @Inject() (val messagesApi: MessagesApi) extends
    * @return The result to send to the client.
    */
   override def onNotAuthenticated(implicit request: RequestHeader) = {
-    Future.successful(Redirect(controllers.routes.SignInController.view()))
+    Future.successful(Redirect(controllers.routes.SignInController.view()).flashing("targetPath" -> request.target.path))
 //    Future.successful(Redirect(controllers.routes.SpikeController.debugMsgPage("onNotAuthenticated?")))
   }
 
